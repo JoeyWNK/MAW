@@ -1,5 +1,6 @@
 package action;
 
+import info.CreateXML;
 import info.FairyInfo;
 import java.util.ArrayList;
 import net.Process;
@@ -31,7 +32,7 @@ public class GetFairyInfo {
 		}
 		try {
 			doc = Process.ParseXMLBytes(result);
-			
+			CreateXML.createXML(doc, "FairyInfo");
 
 		} catch (Exception ex) {
 			throw ex;

@@ -1,5 +1,6 @@
 package action;
 
+import info.CreateXML;
 import info.FairyInfo;
 import java.util.ArrayList;
 import javax.xml.xpath.XPath;
@@ -33,6 +34,7 @@ public class FairyHistory {
 		}
 		try {
 			doc = Process.ParseXMLBytes(result);
+			CreateXML.createXML(doc, "FairyHistoryInfo");
 		} catch (Exception ex) {
 			throw ex;
 		}

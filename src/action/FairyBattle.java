@@ -12,7 +12,6 @@ import org.w3c.dom.Document;
 
 import start.Info;
 
-@SuppressWarnings("unused")
 public class FairyBattle {
 
 	// 获取妖精列表
@@ -51,7 +50,7 @@ public class FairyBattle {
 			if (ExceptionCatch.catchException(doc)) {
 				return false;
 			}
-//			CreateXML.createXML(doc, "BattleInfo");
+			CreateXML.createXML(doc, "FairyBattleInfo");
 			GetUserInfo.getUserInfo(doc, false);
 			GetBattleResult.getBattleResult(doc);
 		} catch (Exception ex) {

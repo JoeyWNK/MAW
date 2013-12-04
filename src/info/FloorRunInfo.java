@@ -10,7 +10,7 @@ import org.w3c.dom.Document;
 public class FloorRunInfo {
 	
 	public static void floorRunInfo(Document doc) throws Exception{
-//		CreateXML.createXML(doc, "FloorRunInfo");
+		CreateXML.createXML(doc, "FloorRunInfo");
 		XPathFactory factory = XPathFactory.newInstance();
 		XPath xpath = factory.newXPath();
 		

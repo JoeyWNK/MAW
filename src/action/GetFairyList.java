@@ -1,5 +1,6 @@
 package action;
 
+import info.CreateXML;
 import info.FairyInfo;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +53,7 @@ public class GetFairyList {
 			if (ExceptionCatch.catchException(doc)) {
 				return false;
 			}
-//			CreateXML.createXML(doc, "Fairylist");
+			CreateXML.createXML(doc, "Fairylist");
 			NodeList list = (NodeList) xpath.evaluate(
 					"//fairy_select/fairy_event[put_down=1]", doc,
 					XPathConstants.NODESET);

@@ -50,7 +50,7 @@ public class BattleAreaBoss {
 			if (ExceptionCatch.catchException(doc)) {
 				return false;
 			}
-			CreateXML.createXML(doc, "123");
+			CreateXML.createXML(doc, "AreaBossInfo");
 
 			Process.info.bossId = 0;
 		} catch (Exception ex) {

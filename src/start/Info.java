@@ -13,7 +13,7 @@ import java.util.Stack;
 
 public class Info {
 
-	
+	public static boolean devMode = true ; 
 	
 	// login info
 	public static String LoginId = "";

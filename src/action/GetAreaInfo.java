@@ -17,7 +17,6 @@ import org.w3c.dom.NodeList;
 
 import start.Info;
 
-@SuppressWarnings("unused")
 public class GetAreaInfo {
 
 	// 地图url
@@ -37,7 +36,7 @@ public class GetAreaInfo {
 		}
 		try {
 			doc = Process.ParseXMLBytes(result);
-//			CreateXML.createXML(doc, "Floorinfo");
+			CreateXML.createXML(doc, "Floorinfo");
 		} catch (Exception ex) {
 			throw ex;
 		}
