@@ -10,6 +10,7 @@ import org.w3c.dom.Document;
 public class FloorRunInfo {
 	
 	public static void floorRunInfo(Document doc) throws Exception{
+//		CreateXML.createXML(doc, "FloorRunInfo");
 		XPathFactory factory = XPathFactory.newInstance();
 		XPath xpath = factory.newXPath();
 		
@@ -42,6 +43,7 @@ public class FloorRunInfo {
 		Process.info.progress = Integer.parseInt(xpath.evaluate("//explore/progress", doc));
 		Process.info.lvup = Integer.parseInt(xpath.evaluate("//explore/lvup", doc));
 		Process.info.getExp = Integer.parseInt(xpath.evaluate("//explore/get_exp", doc));
+		Process.info.exp = Integer.parseInt(xpath.evaluate("//explore/next_exp", doc));
 		Process.info.runGold = Integer.parseInt(xpath.evaluate("//explore/gold", doc));
 		try{
 			if(Process.info.progress == 100){

@@ -1,5 +1,6 @@
 package action;
 
+import info.CreateXML;
 import info.FairyInfo;
 import info.GetBattleResult;
 import info.GetUserInfo;
@@ -11,6 +12,7 @@ import org.w3c.dom.Document;
 
 import start.Info;
 
+@SuppressWarnings("unused")
 public class FairyBattle {
 
 	// 获取妖精列表
@@ -49,7 +51,7 @@ public class FairyBattle {
 			if (ExceptionCatch.catchException(doc)) {
 				return false;
 			}
-
+//			CreateXML.createXML(doc, "BattleInfo");
 			GetUserInfo.getUserInfo(doc, false);
 			GetBattleResult.getBattleResult(doc);
 		} catch (Exception ex) {

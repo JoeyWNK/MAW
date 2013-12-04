@@ -16,17 +16,23 @@ public class PvpWithNoName {
 	// 获取无名亚瑟
 	private static final String URL_GET_PVP = Info.LoginServer
 			+ "/connect/app/battle/battle?cyt=1";
-
+//	private static final String URL_Fresh_PVP = Info.LoginServer + "/connect/app/battle/battle_userlist?cyt=1";
 	// 返回结果
 	private static byte[] result;
 
 	public static boolean run(NoNameInfo nameInfo) throws Exception {
 		Document doc;
 		ArrayList<NameValuePair> al = new ArrayList<NameValuePair>();
+		al.add(new BasicNameValuePair("battle_type", "0"));
+		al.add(new BasicNameValuePair("event_id", Info.PVPEvent));
 		al.add(new BasicNameValuePair("user_id", nameInfo.userId));
-		al.add(new BasicNameValuePair("parts_id", "0"));
-		al.add(new BasicNameValuePair("lake_id", "0"));
+//		al.add(new BasicNameValuePair("parts_id", "0"));
+//		al.add(new BasicNameValuePair("lake_id", "0"));
+//		ArrayList<NameValuePair> a2 = new ArrayList<NameValuePair>();
+//		a2.add(new BasicNameValuePair("event_id", Info.PVPEvent));
+//		a2.add(new BasicNameValuePair("move", "1"));
 		try {
+//			Process.connect.connectToServer(URL_Fresh_PVP, a2);
 			result = Process.connect.connectToServer(URL_GET_PVP, al);
 		} catch (Exception ex) {
 			throw ex;

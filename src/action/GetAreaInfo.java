@@ -1,5 +1,6 @@
 package action;
 
+import info.CreateXML;
 import info.FloorInfo;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.w3c.dom.NodeList;
 
 import start.Info;
 
+@SuppressWarnings("unused")
 public class GetAreaInfo {
 
 	// 地图url
@@ -35,7 +37,7 @@ public class GetAreaInfo {
 		}
 		try {
 			doc = Process.ParseXMLBytes(result);
-
+//			CreateXML.createXML(doc, "Floorinfo");
 		} catch (Exception ex) {
 			throw ex;
 		}
@@ -52,7 +54,6 @@ public class GetAreaInfo {
 			if (ExceptionCatch.catchException(doc)) {
 				return false;
 			}
-
 			XPathFactory factory = XPathFactory.newInstance();
 			XPath xpath = factory.newXPath();
 			NodeList list = (NodeList) xpath.evaluate(

@@ -3,6 +3,7 @@ package action;
 import java.util.ArrayList;
 import net.Process;
 import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.w3c.dom.Document;
 
 import start.Info;
@@ -10,7 +11,7 @@ import start.Info;
 public class PVPRedirect {
 	// 获取无名亚瑟
 	private static final String URL_GET_REDIRECT = Info.LoginServer
-			+ "/connect/app/battle/competition_parts?redirect_flg=1";
+			+ "/connect/app/battle/battle_userlist?cyt=1";
 
 	// 返回结果
 	private static byte[] result;
@@ -18,6 +19,8 @@ public class PVPRedirect {
 	public static boolean run() throws Exception {
 		Document doc;
 		ArrayList<NameValuePair> al = new ArrayList<NameValuePair>();
+		al.add(new BasicNameValuePair("event_id","48"));
+		al.add(new BasicNameValuePair("move","1"));
 		try {
 			result = Process.connect.connectToServer(URL_GET_REDIRECT, al);
 		} catch (Exception ex) {

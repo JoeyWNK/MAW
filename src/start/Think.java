@@ -28,6 +28,8 @@ public class Think {
 				return Action.LV_UP;
 			case GET_FLOOR_INFO:
 				return Action.GET_FLOOR_INFO;
+			case SELL_CARD:
+				return Action.SELL_CARD;
 			default:
 			}
 		}

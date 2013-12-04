@@ -15,5 +15,7 @@ public class FairyInfo {
 	public int currentHp = 0;
 
 	public int maxHp = 0;
+	
+	public int LimitTime = 0;
 
 }

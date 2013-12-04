@@ -25,6 +25,14 @@ public class ExceptionCatch {
 					Info.timepoverty = 5;
 					throw new Exception(errorCode + "："
 							+ errorMessage.replace("\n", "，"));
+				}else if (errorCode.equals("8000") && errorMessage.replace("\n", "，").contains("卡片")) {
+					throw new Exception(errorCode + "："
+							+ errorMessage.replace("\n", "，"));
+				}else if (errorCode.equals("1010") || errorMessage.replace("\n", "，").contains("消灭")) {
+					if (Info.timepoverty > 1)
+					Info.timepoverty = Info.timepoverty / 2 ;
+					throw new Exception(errorCode + "："
+							+ errorMessage.replace("\n", "，"));
 				}
 				Go.log("错误code：" + errorCode + ",错误内容："
 						+ errorMessage.replace("\n", "，"));

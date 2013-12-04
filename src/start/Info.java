@@ -3,6 +3,7 @@ package start;
 import info.CardConfigInfo;
 import info.FairyInfo;
 import info.FloorInfo;
+import info.MAPConfigInfo;
 import info.NoNameInfo;
 import info.UserCardsInfo;
 
@@ -12,6 +13,7 @@ import java.util.Stack;
 
 public class Info {
 
+	
 	
 	// login info
 	public static String LoginId = "";
@@ -25,6 +27,7 @@ public class Info {
 	public static String isBattlePrivateFariy = "";
 	public static int waitTime = 5;
 	public static int stopRunWhenBcMore = 0;
+	public static int stopRunWhenApLess = 0;
 	public static String autoPoint = "bc";
 	public static String userAgent = "";
 	public static String runFactor = "0";
@@ -35,7 +38,7 @@ public class Info {
 	public static int canRun = 1;
 	
 	// 卡组资料
-	public static int whenBcMoreThan = 0;
+	public static int whenBcMoreThan = 0;	
 	public static String pvpCard = "";
 	public static String pvpLr = "";
 	public static int pvpCost = 0;
@@ -58,7 +61,10 @@ public class Info {
 	public int bcMax = 0;
 	public int bcCurrent = 0;
 	public int freeApBcPoint = 0; // 可分配点数
-
+	public int friendpoint = 0;
+	public int fullAp = 0;
+	public int fullBc = 0;
+	
 	// floor info
 	public String floorId = "";
 	public int floorCost = 0;
@@ -71,7 +77,10 @@ public class Info {
 	public int nextFloorCost = 0;
 	public int areaClear = 0;
 	public int bossId = 0;
-
+	public static boolean maptimelimit = false;//发现限时秘境时，或者不在发现时段，为true 在可能出现时段，但未发现时为 false
+	public static List<MAPConfigInfo> MAPConfigInfos = new ArrayList<MAPConfigInfo>();
+	public static int maptimelimitDown = 0;
+	public static int maptimelimitUp = 0;
 	// battle result
 	public String battleResult = "";
 	public int gold = 0;
@@ -110,6 +119,8 @@ public class Info {
 
 	// 卡组信息
 	public static List<CardConfigInfo> cardConfigInfos = new ArrayList<CardConfigInfo>();
+	public static String PVPEvent = "48";
+	
 	
 	
 
@@ -117,7 +128,6 @@ public class Info {
 		noNameList = new ArrayList<NoNameInfo>();
 		fairyInfos = new ArrayList<FairyInfo>();
 		canBattleFairyInfos = new ArrayList<FairyInfo>();
-		floorInfos = new ArrayList<FloorInfo>();
 		events = new Stack<EventType>();
 		events.push(EventType.notLoggedIn);
 	}

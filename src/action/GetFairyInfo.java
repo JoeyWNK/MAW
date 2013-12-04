@@ -31,6 +31,7 @@ public class GetFairyInfo {
 		}
 		try {
 			doc = Process.ParseXMLBytes(result);
+			
 
 		} catch (Exception ex) {
 			throw ex;
@@ -43,6 +44,7 @@ public class GetFairyInfo {
 	}
 
 	private static boolean parse(Document doc) throws Exception {
+		
 		return true;
 	}
 

@@ -1,0 +1,341 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<username></username>  <!-- 手机号 -->
+	<password></password>  <!-- 密码 -->
+	<user_agent>101</user_agent>  <!-- 版本号，游戏更新改动这里就可以了 -->
+	<server></server>   <!-- 游戏区，1区填1，2区填2，3区填3，以后有4区理论上填4就行了…… -->
+	<sleep>75</sleep>   <!-- 掉线重连时间，单位为秒，因为不提供卖卡等功能，设置掉线重连时间可以方便卡快满的时候用手机卖下卡，免得满卡挂不了机 -->
+	<SellCards>1</SellCards>	<!-- 卖卡 -->
+	<smartSell>0</smartSell>	<!-- 智能卖卡 -->
+	<poverty>5</poverty>	<!-- 自动扫描控制 -->
+	<povertyMAX>30</povertyMAX>	<!-- 自动扫描控制 -->
+	<log>1</log>	<!-- 日志记录 -->
+	<simple>1</simple>	<!-- 简单日志记录 -->
+	<wait_time>0</wait_time>  <!-- 扫列表频率，单位为秒 -->
+	<option> <!-- 以下选项如果选是则填1，否则填0 -->
+		<is_pvp>0</is_pvp>  <!-- 是否点名 -->
+		<pvp_eventid>48</pvp_eventid>
+		<is_run>1</is_run>  <!-- 是否跑图 -->
+		<run_factor>0</run_factor>  <!-- 是否跑因子（需要开启跑图），和跑每日冲突，开启跑因子之后不会跑每日，和指定跑图不冲突，不过一般没人指定跑因子图吧…… -->
+		<day_first>1</day_first>  <!-- 优先跑每日秘境（需要开启跑图） -->
+		<what_map>0</what_map>  <!-- 指定跑哪张图，选图界面从上往下数，0表示不指定，本选项优先级低于优先跑每日（需要开启跑图） -->
+		<is_battle_private_fairy>1</is_battle_private_fairy>  <!-- 是否放自己的妖 -->
+		<has_private_fairy_stop_run>1</has_private_fairy_stop_run>  <!-- 身上有妖精停止跑图 -->
+	</option>
+
+	<mapsettings>  
+		<mapsetting>
+			<day>2</day>   <!-- 星期一 -->
+			<hour>18-24</hour>
+			<daily>1</daily>
+			<fixed>false</fixed>    
+		</mapsetting>
+		<mapsetting>
+			<day>3</day>   <!-- 星期二 -->
+			<hour>18-24</hour>
+			<daily>1</daily>
+			<fixed>false</fixed>    
+		</mapsetting>
+		<mapsetting>
+			<day>4</day>   <!-- 星期三 -->
+			<hour>18-24</hour>
+			<daily>1</daily>
+			<fixed>false</fixed>    
+		</mapsetting>
+		<mapsetting>
+			<day>5</day>   <!-- 星期四 -->
+			<hour>18-24</hour>
+			<daily>1</daily>
+			<fixed>true</fixed>    
+		</mapsetting>
+		<mapsetting>
+			<day>6</day>   <!-- 星期五 -->
+			<hour>18-24</hour>
+			<daily>0</daily>
+			<fixed>false</fixed>    
+		</mapsetting>
+		<mapsetting>
+			<day>7</day>   <!-- 星期六 -->
+			<hour>12-24</hour>
+			<daily>0</daily>
+			<fixed>false</fixed>   
+		</mapsetting>
+		<mapsetting>
+			<day>1</day>   <!-- 星期天 -->
+			<hour>12-24</hour>
+			<daily>0</daily>
+			<fixed>false</fixed>    
+		</mapsetting>
+	</mapsettings>
+
+	<stop_run_when_bc_more>999</stop_run_when_bc_more>  <!-- 当bc多余设定的值得时候停止跑图，主要目的是防止周一浪费bc，不需要这个功能把值设置到特别大就行了，比如999 -->
+	<stop_run_when_ap_less>68</stop_run_when_ap_less>  <!-- 当ap少余设定的值得时候停止跑图，主要目的是为了限时秘境，不需要这个功能把值设置到特别小就行了，比如0 -->
+	<auto_point>bc</auto_point>   <!-- 自动加点，填ap或者bc -->
+	
+	<!-- 提供换卡功能，不过比较麻烦，希望耐心看完 -->
+	<!-- 卡组格式如下： -->
+	<!-- empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty -->
+	<!-- 一共12个empty，依序代表12张卡，第4个empty是第2排第一张，以此类推 -->
+	<!-- empty要填的是卡片的编号，如何找出要填卡片的编号呢 -->
+	<!-- 首先填完账号密码游戏区之后，在外面运行一遍“启动.bat”，出现登录成功后关掉 -->
+	<!-- 然后可以发现外面多了一个userInfo.xml，这个里面存的是你的账号所有信息 -->
+	<!-- 用记事本打开userInfo.xml，然后上游戏找到你想要设置的卡片 -->	
+	<!-- 在userInfo.xml里面搜索你想要设置的卡片的hp，然后可能会有多张同样hp的卡片，这个时候就再对比atk（xml里面是power），lv（卡片当前等级），lv_max（卡片最大等级）之类的信息 -->
+	<!-- 都一致的基本上就是你需要的卡片了，然后把找到的serial_id替换empty就可以了  -->
+	<!-- 可以自行新建个记事本，把常用的卡片的serial_id记录下来，这样就比较方便了 -->
+	<!-- 举个例子，比如我的女仆的serial_id是10086 -->
+	<!-- 那么我单女仆需要填的就是 ：10086,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty-->
+	<!-- 不要少填也不要多填，多卡就依次替换empty就好了，确保最后填完是12张卡 -->
+	<!-- 填完之后重新启动一遍“启动.bat”，然后可以上游戏再确认一下是否换成功了 -->
+	<!-- 再啰嗦一句吧……不要设置完运行启动.bat就马上上游戏确认，比如你设置了点名卡组，至少点了一个人再上游戏看吧，不然可能还没有跑到换卡那一步…… -->
+	<!-- 虽然比较麻烦，不过也算得上一劳永逸的工作，常用都是固定那几张卡吧,而且找过一次之后，再找也不会觉得麻烦了 -->
+	<!-- 如果不填，则默认用狼娘 -->
+	<card>
+		<!-- 点名用的卡组 -->
+		<pvp>
+			<pvp_when_bc_more_than>60</pvp_when_bc_more_than>  <!-- 多余多少bc开始点名，默认30bc -->
+			<pvp_card>34772370,57131755,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty</pvp_card>   <!-- pvp需要的卡组，如果不填，则默认用狼娘 -->
+		</pvp>
+		<!-- 舔妖精用卡组，没有狼娘本项必填，否则不能正常使用，有狼娘就不用填了，填了也是用狼娘舔，用于没有狼娘的号舔妖精 -->
+		<lick_fairy>
+			<card>34772370</card>  <!-- 卡片，填单卡就可以了，比如10086 -->
+			<cost>2</cost>  <!-- 这张卡片需要多少cost -->
+		</lick_fairy>
+		<!-- 打秘境守护者用的卡组，直接上12卡打100%能过，不消耗bc的 -->
+		<battle_area_boss>empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty</battle_area_boss>		
+		<!-- 打妖精用的卡组 -->
+		<!-- wake：是否用来打觉醒,1表示是，0表示否，不要填其他的数字 -->
+		<!-- fairy_lv：多少级的妖精使用这个卡组，用“-”隔开，比如50-70 -->
+		<!-- fairy_hp：妖精剩余HP大于等于多少时使用这个卡组，小数表示，比如0.8表示妖精在总血量80%的时候使用这个卡组 -->
+		<!-- battle_card：具体参战的卡片，卡组格式如上面说明所述 -->
+		<!-- battle_cost：参战卡片需要耗费的cost -->
+		
+		<!-- 需要添加卡组自行增加，格式一样就行了，一个<battle_fairy></battle_fairy>代表一个卡组，数量自定义，不想使用的删除掉就行了 -->
+		<!-- 如果不想使用已经定义的卡组功能，又不想删除掉，把妖精等级设置到离谱就行了，但是只要有卡组，则任何一个卡组里面的值都不能有错 -->
+		<!-- 不满足卡组条件的妖精会用狼娘舔一下 -->
+
+		<battle_fairy>
+			<wake>0</wake>   
+			<fairy_lv>80-120</fairy_lv>   
+			<fairy_hp>0.1</fairy_hp>			<battle_card>110530868,104121064,110509712,empty,empty,empty,empty,empty,empty,empty,empty,empty</battle_card> 
+			<battle_cost>39</battle_cost>  
+		</battle_fairy>
+
+		<battle_fairy>
+			<wake>0</wake>   
+			<fairy_lv>43-79</fairy_lv>   
+			<fairy_hp>0.5</fairy_hp>			<battle_card>110530868,104121064,110509712,empty,empty,empty,empty,empty,empty,empty,empty,empty</battle_card> 
+			<battle_cost>39</battle_cost>  
+		</battle_fairy>
+
+		<battle_fairy>
+			<wake>1</wake>   
+			<fairy_lv>1-20</fairy_lv>   
+			<fairy_hp>0.1</fairy_hp>			<battle_card>110530868,104121064,110509712,empty,empty,empty,empty,empty,empty,empty,empty,empty</battle_card> 
+			<battle_cost>39</battle_cost>  
+		</battle_fairy>
+
+		<battle_fairy>
+			<wake>0</wake>   
+			<fairy_lv>43-79</fairy_lv>   
+			<fairy_hp>0.2</fairy_hp>			<battle_card>110530868,34772370,110508586,empty,empty,empty,empty,empty,empty,empty,empty,empty</battle_card> 
+			<battle_cost>32</battle_cost>  
+		</battle_fairy>
+
+		<battle_fairy>
+			<wake>0</wake>   
+			<fairy_lv>28-42</fairy_lv>   
+			<fairy_hp>0.8</fairy_hp>			<battle_card>110530868,34772370,110508586,empty,empty,empty,empty,empty,empty,empty,empty,empty</battle_card> 
+			<battle_cost>32</battle_cost>  
+		</battle_fairy>
+
+		<battle_fairy>
+			<wake>0</wake>   
+			<fairy_lv>28-42</fairy_lv>   
+			<fairy_hp>0.3</fairy_hp>			<battle_card>110530868,57131755,110509712,empty,empty,empty,empty,empty,empty,empty,empty,empty</battle_card> 
+			<battle_cost>26</battle_cost>  
+		</battle_fairy>
+
+		<battle_fairy>
+			<wake>0</wake>   
+			<fairy_lv>25-36</fairy_lv>   
+			<fairy_hp>0.8</fairy_hp>			<battle_card>110530868,57131755,110509712,empty,empty,empty,empty,empty,empty,empty,empty,empty</battle_card> 
+			<battle_cost>26</battle_cost>  
+		</battle_fairy>
+
+		<battle_fairy>
+			<wake>0</wake>   
+			<fairy_lv>25-36</fairy_lv>   
+			<fairy_hp>0.2</fairy_hp>			<battle_card>110530868,34772370,110509712,empty,empty,empty,empty,empty,empty,empty,empty,empty</battle_card> 
+			<battle_cost>23</battle_cost>  
+		</battle_fairy>
+
+		<battle_fairy>
+			<wake>0</wake>   
+			<fairy_lv>22-31</fairy_lv>   
+			<fairy_hp>0.8</fairy_hp>			<battle_card>110530868,34772370,110509712,empty,empty,empty,empty,empty,empty,empty,empty,empty</battle_card> 
+			<battle_cost>23</battle_cost>  
+		</battle_fairy>
+
+		<battle_fairy>
+			<wake>0</wake>   
+			<fairy_lv>22-31</fairy_lv>   
+			<fairy_hp>0.2</fairy_hp>			<battle_card>57131755,110530868,89133407,empty,empty,empty,empty,empty,empty,empty,empty,empty</battle_card> 
+			<battle_cost>23</battle_cost>  
+		</battle_fairy>
+
+		<battle_fairy>
+			<wake>0</wake>   
+			<fairy_lv>18-26</fairy_lv>   
+			<fairy_hp>0.8</fairy_hp>			<battle_card>57131755,110530868,89133407,empty,empty,empty,empty,empty,empty,empty,empty,empty</battle_card> 
+			<battle_cost>23</battle_cost>  
+		</battle_fairy>
+
+		<battle_fairy>
+			<wake>0</wake>   
+			<fairy_lv>18-26</fairy_lv>   
+			<fairy_hp>0.2</fairy_hp>			<battle_card>57131755,110530868,34772370,empty,empty,empty,empty,empty,empty,empty,empty,empty</battle_card> 
+			<battle_cost>19</battle_cost>  
+		</battle_fairy>
+
+		<battle_fairy>
+			<wake>0</wake>   
+			<fairy_lv>16-24</fairy_lv>   
+			<fairy_hp>0.8</fairy_hp>			<battle_card>57131755,110530868,34772370,empty,empty,empty,empty,empty,empty,empty,empty,empty</battle_card> 
+			<battle_cost>19</battle_cost>  
+		</battle_fairy>
+
+		<battle_fairy>
+			<wake>0</wake>   
+			<fairy_lv>16-24</fairy_lv>   
+			<fairy_hp>0.2</fairy_hp>			<battle_card>55298900,110530868,34772370,empty,empty,empty,empty,empty,empty,empty,empty,empty</battle_card> 
+			<battle_cost>17</battle_cost>  
+		</battle_fairy>
+
+		<battle_fairy>
+			<wake>0</wake>   
+			<fairy_lv>14-21</fairy_lv>   
+			<fairy_hp>0.8</fairy_hp>			<battle_card>55298900,110530868,34772370,empty,empty,empty,empty,empty,empty,empty,empty,empty</battle_card> 
+			<battle_cost>17</battle_cost>  
+		</battle_fairy>
+
+		<battle_fairy>
+			<wake>0</wake>   
+			<fairy_lv>14-21</fairy_lv>   
+			<fairy_hp>0.2</fairy_hp>			<battle_card>55298900,110530868,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty</battle_card> 
+			<battle_cost>15</battle_cost>  
+		</battle_fairy>
+
+		<battle_fairy>
+			<wake>0</wake>   
+			<fairy_lv>8-15</fairy_lv>   
+			<fairy_hp>0.8</fairy_hp>			<battle_card>55298900,110530868,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty</battle_card> 
+			<battle_cost>15</battle_cost>  
+		</battle_fairy>
+
+		<battle_fairy>
+			<wake>0</wake>   
+			<fairy_lv>8-15</fairy_lv>   
+			<fairy_hp>0.2</fairy_hp>			<battle_card>34772370,57131755,55298900,empty,empty,empty,empty,empty,empty,empty,empty,empty</battle_card> 
+			<battle_cost>10</battle_cost>  
+		</battle_fairy>
+
+		<battle_fairy>
+			<wake>0</wake>   
+			<fairy_lv>4-9</fairy_lv>   
+			<fairy_hp>0.8</fairy_hp>			<battle_card>34772370,57131755,55298900,empty,empty,empty,empty,empty,empty,empty,empty,empty</battle_card> 
+			<battle_cost>10</battle_cost>  
+		</battle_fairy>
+
+		<battle_fairy>
+			<wake>0</wake>   
+			<fairy_lv>1-5</fairy_lv>   
+			<fairy_hp>0.2</fairy_hp>			<battle_card>34772370,57131755,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty</battle_card> 
+			<battle_cost>7</battle_cost>  
+		</battle_fairy>
+
+		<battle_fairy>
+			<wake>0</wake>   
+			<fairy_lv>1-5</fairy_lv>   
+			<fairy_hp>0.8</fairy_hp>			<battle_card>34772370,57131755,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty</battle_card> 
+			<battle_cost>7</battle_cost>  
+		</battle_fairy>
+
+		<battle_fairy>
+			<wake>0</wake>   
+			<fairy_lv>1-5</fairy_lv>   
+			<fairy_hp>0.1</fairy_hp>			<battle_card>57131755,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty,empty</battle_card> 
+			<battle_cost>5</battle_cost>  
+		</battle_fairy>
+
+
+	</card>
+	<sell_card>
+
+		<!-- 同样只对日服有用，其他服待加 -->
+		<!--
+			本项是用来卖卡的，以供长期挂机。
+			id是卡片的id，有意者可以自己填
+		-->
+		<policy>sell</policy>
+		<id>4</id>
+		<id>8</id>
+		<id>9</id>
+		<id>16</id>
+		<id>18</id>
+		<id>35</id>
+		<id>40</id>
+		<id>41</id>
+		<id>42</id>
+		<id>46</id>
+		<id>47</id>
+		<id>51</id>
+		<id>52</id>
+		<id>53</id>
+		<id>54</id>
+		<id>65</id>
+		<id>66</id>
+		<id>68</id>
+		<id>69</id>
+		<id>73</id>
+		<id>78</id>
+		<id>83</id>
+		<id>89</id>
+		<id>100</id>
+		<id>104</id>
+		<id>108</id>
+		<id>105</id>
+		<id>126</id>
+		<id>127</id>
+		<id>130</id>
+		<id>132</id>
+		<id>135</id>
+		<id>139</id>
+		<id>140</id>
+		<id>141</id>
+		<id>142</id>
+		<id>145</id>
+		<id>151</id>
+		<id>182</id>
+		<id>190</id>
+		<id>188</id>
+		<id>191</id>
+		<id>198</id>
+		<id>200</id>
+		<id>205</id>
+		<id>206</id>
+		<id>208</id>
+		<id>215</id>
+		<id>217</id>
+		<id>260</id>
+		<id>263</id>
+		<id>266</id>
+		<id>270</id>
+		<id>279</id>
+		<id>282</id>
+		<id>283</id>
+		<id>323</id>
+		<id>327</id>
+		<!-- <id></id> -->
+	</sell_card>
+</config>

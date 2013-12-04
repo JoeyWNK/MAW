@@ -32,14 +32,26 @@ public class GetUserInfo {
 				"//your_data/bc/current", doc));
 		Process.info.freeApBcPoint = Integer.parseInt(xpath.evaluate(
 				"//your_data/free_ap_bc_point", doc));
+		Process.info.friendpoint = Integer.parseInt(xpath.evaluate(
+				"//your_data/friendship_point", doc));
 		String cardMax = xpath.evaluate("//your_data/max_card_num",doc);
+		if ((boolean)xpath.evaluate("count(//your_data/itemlist[item_id=1])>0", doc, XPathConstants.BOOLEAN)) {
+			Process.info.fullAp = Integer.parseInt(xpath.evaluate("//your_data/itemlist[item_id=1]/num", doc));
+		}
+		if ((boolean)xpath.evaluate("count(//your_data/itemlist[item_id=2])>0", doc, XPathConstants.BOOLEAN)) {
+			Process.info.fullBc = Integer.parseInt(xpath.evaluate("//your_data/itemlist[item_id=2]/num", doc));
+		}
+		if ((boolean)xpath.evaluate("count(//your_data/itemlist[item_id=74])>0", doc, XPathConstants.BOOLEAN)) {
+			Process.info.gather = Integer.parseInt(xpath.evaluate("//your_data/itemlist[item_id=74]/num", doc));
+		}
 		if (cardMax != null && !cardMax.isEmpty()) {
 			Process.info.cardMax = Integer.parseInt(cardMax);	
 		}
+		int cardCount = ((NodeList)xpath.evaluate("//owner_card_list/user_card", doc, XPathConstants.NODESET)).getLength();
 		if (getId) {
 			Process.info.userId = xpath.evaluate(
 					"/response/body/login/user_id", doc);
-			int cardCount = ((NodeList)xpath.evaluate("//owner_card_list/user_card", doc, XPathConstants.NODESET)).getLength();
+			
 			if (cardCount > 0) Info.userCardsInfos = new ArrayList<UserCardsInfo>();
 			String wolf = null;
 			int wolflv = 0;
