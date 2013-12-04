@@ -61,7 +61,9 @@ public class FairyHistory {
 					|| (Process.info.bcCurrent 
 							>= Process.info.bcMax - 10)/** BC过多 **/
 					|| (Integer.parseInt(xpath.evaluate(
-							"//fairy_history/fairy/time_limit", doc)) <= 600)/** 时间过短 **/
+							"//fairy_history/fairy/time_limit", doc)) <= 600 
+						&& Process.info.bcCurrent >= 40 /** 将加入判断程序 **/
+						)/** 时间过短 **/
 					)
 				&& (Integer.parseInt(xpath.evaluate(
 					"//fairy_history/fairy/hp", doc)) > 0)
