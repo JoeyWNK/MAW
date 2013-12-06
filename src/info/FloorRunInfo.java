@@ -31,12 +31,6 @@ public class FloorRunInfo {
 			Process.info.event_type = "获得卡片";
 		}else if(event_type.equals("19")){
 			Process.info.event_type = "获得道具";
-			try{
-			Process.info.gather = Integer.parseInt(xpath.evaluate(
-					"//special_item/after_count", doc));
-			}catch(Exception e){
-				
-			}
 		}else{
 			Process.info.event_type = event_type;
 		}

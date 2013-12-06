@@ -1,5 +1,7 @@
 package action;
 
+import info.CreateXML;
+import info.GetUserInfo;
 import info.UserCardsInfo;
 
 import java.util.ArrayList;
@@ -37,15 +39,13 @@ public class SellCard {
 							(Info.smartSell 
 								&& (
 									card.lv < 5 
-									&& (card.sale_price > 60 && card.sale_price < 200) 
+									&& (card.sale_price > 60 && card.sale_price < 200) ||(card.sale_price == 600)
 									&& (card.hp > 5 || card.atk > 5)
-								)
-								||(card.sale_price == 600)
+								)								
 							)
 							|| 
 							(Info.CanBeSold.contains(card.master_card_id)
-									&& card.lv < 5 
-									
+								&& card.lv < 5 									
 							)
 						)
 					)&& !card.holography
@@ -74,6 +74,8 @@ public class SellCard {
 		Document doc;
 		try {
 			doc = Process.ParseXMLBytes(response);
+			GetUserInfo.getUserInfo(doc, true);
+			CreateXML.createXML(doc, "SellCards");
 		} catch (Exception ex) {
 /**			ErrorData.currentDataType = ErrorData.DataType.bytes;
 			ErrorData.currentErrorType = ErrorData.ErrorType.SellCardDataError;

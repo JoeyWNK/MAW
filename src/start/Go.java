@@ -47,6 +47,11 @@ public class Go {
 				neterror = true;
 			else return;
 			msg = "连接错误";
+		}else if(msg.contains("time out")){
+			if (!neterror)
+				neterror = true;
+			else return;
+			msg = "连接超时";
 		}
 		else if(neterror){
 			neterror = false;
@@ -69,7 +74,10 @@ public class Go {
 		}
 		if (!msg.contains("\n")) {
 			if (waited){
-				System.out.println("已等待"+(int)totaltime+"秒");
+				if (totaltime > 60)
+					System.out.println("已等待"+(int)(totaltime / 60)+"分钟" + (int)(totaltime % 60) + "秒");
+				else
+					System.out.println("已等待"+(int)totaltime+"秒");
 				totaltime = 0;
 				waited = false;
 			}
@@ -79,7 +87,10 @@ public class Go {
 		}
 		for (String l : msg.split("\n")) {
 			if (waited){
-				System.out.println("已等待"+(int)totaltime+"秒");
+				if (totaltime > 60)
+					System.out.println("已等待"+(int)(totaltime / 60)+"分钟" + (int)(totaltime % 60) + "秒");
+				else
+					System.out.println("已等待"+(int)totaltime+"秒");
 				totaltime = 0;
 				waited = false;
 			}

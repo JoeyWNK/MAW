@@ -84,7 +84,7 @@ public class Process {
 							info.events.push(Info.EventType.cardFull);
 						else if (e.getMessage().contains("无法"))
 							info.events.push(Info.EventType.fairyCanBattle);
-					}else if (e.getMessage().contains("1010")){
+					}else if (e.getMessage().contains("1010") && e.getMessage().contains("消灭")){
 						info.canBattleFairyInfos = new ArrayList<FairyInfo>();
 						info.events.push(Info.EventType.fairyAppear);
 					}else
@@ -153,6 +153,11 @@ public class Process {
 					if (info.gather != 0)
 						str = str + " 收集品:" + info.gather;
 					Go.log(str);
+					if (Info.userCardsInfos.size() >= info.cardMax){
+						Go.log("现有卡片 " + Info.userCardsInfos.size() +"/"+ info.cardMax + " ,开始卖卡或合成");
+						info.events.push(Info.EventType.cardFull);
+						break;
+						}
 					info.events.push(Info.EventType.fairyAppear);
 				} else {
 					info.events.push(Info.EventType.notLoggedIn);
@@ -315,10 +320,10 @@ public class Process {
 				Go.log("现有卡片 " + Info.userCardsInfos.size() +"/"+ info.cardMax + " ,开始卖卡或合成");
 				if(SellCard.run()){
 					Go.log("卖卡成功");
+					ReturnMain.run();
 					}
 				else{
 					Go.log("卖卡失败，等待用户");
-					Thread.sleep(600 * 1000);
 					info.events.push(Info.EventType.fairyAppear);
 					break;
 					}
@@ -336,6 +341,7 @@ public class Process {
 			}
 			if (info.canBattleFairyInfos.size() > 20){
 				Go.log("发现异常，回到主页");
+				info.canBattleFairyInfos = new ArrayList<FairyInfo>();
 				info.events.push(Info.EventType.cookieOutOfDate);
 				break;
 				}
@@ -347,10 +353,10 @@ public class Process {
 					Go.log("现有卡片 " + Info.userCardsInfos.size() +"/"+ info.cardMax + " ,开始卖卡或合成");
 					if(SellCard.run()){
 						Go.log("卖卡成功");
+						ReturnMain.run();
 						}
 					else{
 						Go.log("卖卡失败，等待用户");
-						Thread.sleep(600 * 1000);
 						break;
 					}
 					}
@@ -415,11 +421,11 @@ public class Process {
 						Go.log("现有卡片 " + Info.userCardsInfos.size() +"/"+ info.cardMax + " ,开始卖卡或合成");
 						if(SellCard.run()){
 							Go.log("卖卡成功");
+							ReturnMain.run();
 							info.events.push(Info.EventType.fairyAppear);
 							}
 						else{
 							Go.log("卖卡失败，等待用户");
-							Thread.sleep(600 * 1000);
 							break;
 						}
 						break;
@@ -498,10 +504,10 @@ public class Process {
 					Go.log("现有卡片 " + Info.userCardsInfos.size() +"/"+ info.cardMax + " ,开始卖卡或合成");
 					if(SellCard.run()){
 						Go.log("卖卡成功");
+						ReturnMain.run();
 						}
 					else{
 						Go.log("卖卡失败，等待用户");
-						Thread.sleep(600 * 1000);
 						info.events.push(Info.EventType.fairyAppear);
 						break;
 						}
@@ -586,10 +592,10 @@ public class Process {
 								Go.log("现有卡片 " + Info.userCardsInfos.size() +"/"+ info.cardMax + " ,开始卖卡或合成");
 								if(SellCard.run()){
 									Go.log("卖卡成功");
+									ReturnMain.run();
 									}					
 								else{
 									Go.log("卖卡失败，等待用户");
-									Thread.sleep(600 * 1000);
 									info.events.push(Info.EventType.fairyAppear);
 									break;
 									}
@@ -617,6 +623,7 @@ public class Process {
 				Go.log("尝试卖卡");
 				if(SellCard.run()){
 					Go.log("卖卡成功");
+					ReturnMain.run();
 					info.events.push(Info.EventType.fairyAppear);
 					}
 				else

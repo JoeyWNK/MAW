@@ -1,5 +1,6 @@
 package net;
 
+import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -20,9 +21,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpParams;
 
+import start.Go;
 import start.Info;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings({ "deprecation", "unused" })
 public class Connect { 
 	// 游戏版本
 	private static final String UserAgent = "	Million/"
@@ -85,7 +87,12 @@ public class Connect {
 				throw ex;
 			}
 		} else {
-			connectToServer(url, content);
+			try {
+				connectToServer(url, content);
+			}
+			catch (IOException e){
+			//	Go.log(e.getMessage());
+			}
 		}
 		return null;
 	}
