@@ -38,10 +38,11 @@ public class SellCard {
 			if (					
 					(
 						(
-							(Info.smartSell && ( card.sale_price < 200 && card.sale_price > 20 
-									&& card.atk % 10 != 0 
-									&& card.hp % 10 != 0)
+							(Info.smartSell && ( card.lv < 5 
+									&& (card.sale_price > 60 && card.sale_price < 200) ||(card.sale_price == 600)
+									&& (card.hp > 5 || card.atk > 5)
 									)
+								)
 							||
 							(Info.CanBeSold.contains(card.master_card_id + "")
 								&& card.lv < 5 									
