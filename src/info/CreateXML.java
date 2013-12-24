@@ -16,13 +16,16 @@ import org.w3c.dom.Document;
 import start.Info;
 
 public class CreateXML {
-
+	public static Document UserInfo;
 	public static void createXML(Document doc, String xmlName) {
 		StringWriter strWtr = new StringWriter();
 		StreamResult strResult = new StreamResult(strWtr);
 		TransformerFactory tfac = TransformerFactory.newInstance();
-		if (Info.devMode || xmlName.contains("user"))
-		{
+		
+		if (Info.devMode || xmlName.contains("user")){
+			if (xmlName.contains("user")){
+				UserInfo = doc;
+			}
 			try {
 				javax.xml.transform.Transformer t = tfac.newTransformer();
 				t.setOutputProperty(OutputKeys.ENCODING, "UTF-8");

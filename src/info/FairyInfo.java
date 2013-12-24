@@ -18,4 +18,6 @@ public class FairyInfo {
 	
 	public int LimitTime = 0;
 
+	public String race_type = "";
+
 }

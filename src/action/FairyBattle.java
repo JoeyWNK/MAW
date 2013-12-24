@@ -5,11 +5,11 @@ import info.FairyInfo;
 import info.GetBattleResult;
 import info.GetUserInfo;
 import java.util.ArrayList;
+
 import net.Process;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.w3c.dom.Document;
-
 import start.Info;
 
 public class FairyBattle {
@@ -24,6 +24,7 @@ public class FairyBattle {
 	public static boolean run(FairyInfo fairyInfo) throws Exception {
 		Document doc;
 		ArrayList<NameValuePair> al = new ArrayList<NameValuePair>();
+		al.add(new BasicNameValuePair("race_type", fairyInfo.race_type));
 		al.add(new BasicNameValuePair("serial_id", fairyInfo.serialId));
 		al.add(new BasicNameValuePair("user_id", fairyInfo.userId));
 		try {
@@ -51,8 +52,8 @@ public class FairyBattle {
 				return false;
 			}
 			CreateXML.createXML(doc, "FairyBattleInfo");
-			GetUserInfo.getUserInfo(doc, false);
 			GetBattleResult.getBattleResult(doc);
+			GetUserInfo.getUserInfo(doc, false);
 		} catch (Exception ex) {
 			throw ex;
 		}

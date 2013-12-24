@@ -13,6 +13,7 @@ import net.Process;
 
 @SuppressWarnings("unused")
 public class Go {
+	static SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");//设置日期格式
 	static double totaltime = 0;
 	static boolean waited = false;
 	static boolean neterror = false;
@@ -28,8 +29,7 @@ public class Go {
 			System.out.println("启动完成");
 			// System.out.println(Crypto.DecryptBase64NoKey2Str("NzgOGTK08BvkZN5q8XvG6Q"));
 			System.out.println("开始行动");
-			while (true) {
-				
+			while (true) {				
 				proc.start();
 			}
 		} catch (Exception e) {
@@ -38,11 +38,9 @@ public class Go {
 	}
 
 	public static void log(String msg) {
-		SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");//设置日期格式
-		TimeManager.Check();
 		if (msg == null || msg.isEmpty()) 
 			return;
-		if (msg.contains(".com")){
+		if (msg.contains(".com")||msg.contains("connect")){
 			if (!neterror)
 				neterror = true;
 			else return;
@@ -52,6 +50,11 @@ public class Go {
 				neterror = true;
 			else return;
 			msg = "连接超时";
+		}else if(msg.contains("服务器未响应")){
+			if (!neterror)
+				neterror = true;
+			else return;
+			msg = "服务器未响应";
 		}
 		else if(neterror){
 			neterror = false;
@@ -71,7 +74,9 @@ public class Go {
 					Info.log = false;
 				}
 		
-		}
+		}		
+		if(!neterror)
+			TimeManager.Check(Integer.parseInt(df.format(new Date()).substring(0, 2)));
 		if (!msg.contains("\n")) {
 			if (waited){
 				if (totaltime > 60)
@@ -99,15 +104,15 @@ public class Go {
 		}
 	}
 	public static void log(double time, boolean show){
-		TimeManager.Check();
 		if(neterror){
-			log("连接恢复");
 			neterror = false;
+			log("连接恢复");
 		}
 		if (show)
 		System.out.print((int)time + " ");
 		waited = true;
 		totaltime = totaltime + time;
+		TimeManager.Check(Integer.parseInt(df.format(new Date()).substring(0, 2)));
 	}
 
 }

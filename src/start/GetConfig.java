@@ -22,9 +22,13 @@ import org.w3c.dom.NodeList;
 public class GetConfig {
 
 	private static final String SERVER_PART1 = "http://game";
-	private static final String SERVER_PART2 = "-cbt.ma.sdo.com:10001";
-
+	private static final String SERVER_PART2 = "-CBT.ma.sdo.com:10001";
+	@SuppressWarnings("unused")
+	private static String PATH = "";
+	private static XPath xpath;
+	private static Document doc;
 	public static void readConfig(String path) throws Exception {
+		PATH = path;
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		InputStream is = null;
 		try {
@@ -45,11 +49,11 @@ public class GetConfig {
 			}
 		}
 
-		Document doc = Process.ParseXMLBytes(baos.toByteArray());
+		doc = Process.ParseXMLBytes(baos.toByteArray());
 
 		try {
 			XPathFactory factory = XPathFactory.newInstance();
-			XPath xpath = factory.newXPath();
+			xpath = factory.newXPath();
 			
 			System.out.print("读取登录信息");
 			Info.LoginId = xpath.evaluate("/config/username", doc).trim();
@@ -98,6 +102,7 @@ public class GetConfig {
 			Info.autoPoint = xpath.evaluate("/config/auto_point", doc).trim();
 			Info.hasPrivateFairyStopRun = Integer.parseInt(xpath.evaluate(
 					"/config/option/has_private_fairy_stop_run", doc).trim());
+			Info.hasPrivateFairyStopRunOriginal = Info.hasPrivateFairyStopRun;
 			String runFactor = xpath.evaluate("/config/option/run_factor", doc)
 					.trim();
 			if (runFactor.equals("1")) {
@@ -119,12 +124,15 @@ public class GetConfig {
 						MAPConfigInfo.day = Integer.parseInt(f
 								.getFirstChild().getNodeValue().trim());
 						} else if (f.getNodeName().equals("hour")) {
-							MAPConfigInfo.maptimelimitDown = Integer.parseInt(f
-									.getFirstChild().getNodeValue().trim()
-									.split("-")[0]);
-							MAPConfigInfo.maptimelimitUp = Integer.parseInt(f
-									.getFirstChild().getNodeValue().trim()
-									.split("-")[1]);
+							if (xpath.evaluate("/config/mapsettings/hastimelimit", doc).contains("true")){
+								MAPConfigInfo.maptimelimitDown = Integer.parseInt(f
+										.getFirstChild().getNodeValue().trim()
+										.split("-")[0]);
+								MAPConfigInfo.maptimelimitUp = Integer.parseInt(f
+										.getFirstChild().getNodeValue().trim()
+										.split("-")[1]);
+							}else MAPConfigInfo.maptimelimitUp = -1;
+							
 						} else if (f.getNodeName().equals("daily")) {
 							MAPConfigInfo.daily = f.getFirstChild().getNodeValue().trim();							
 						} else if (f.getNodeName().equals("fixed")) {
@@ -221,7 +229,7 @@ public class GetConfig {
 			System.out.print("读取售卡设定");
 			NodeList idl = (NodeList)xpath.evaluate("/config/sell_card/id", doc, XPathConstants.NODESET);
 			Info.CanBeSold = new ArrayList<String>();
-			for (int i = 0; i< idl.getLength(); i++) {
+			for (int i = 0; i < idl.getLength(); i++) {
 				Node idx = idl.item(i);
 				try {
 					Info.CanBeSold.add(idx.getFirstChild().getNodeValue());
@@ -234,6 +242,19 @@ public class GetConfig {
 		} catch (Exception e) {
 
 		}
+	}
+
+	public static void saveConfig(String userAgent, int i) {
+		try{
+			switch(i){
+			
+			case 1030:
+				
+				}
+			}catch(Exception e){
+				Go.log("写入失败");
+			}
+		
 	}
 
 }

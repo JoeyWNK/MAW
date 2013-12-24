@@ -25,10 +25,15 @@ public class LevelUp {
 			Go.log("分配剩余属性点到ap");
 			al.add(new BasicNameValuePair("ap", "" + Process.info.freeApBcPoint));
 			al.add(new BasicNameValuePair("bc", "0"));
-		} else {
+		} else if (Info.autoPoint.equals("bc")){
 			Go.log("分配剩余属性点到bc");
 			al.add(new BasicNameValuePair("ap", "0"));
 			al.add(new BasicNameValuePair("bc", "" + Process.info.freeApBcPoint));
+		} else {
+			Go.log("分配剩余属性点随机分配");
+			int ap = (int) (Process.info.freeApBcPoint * Math.random());
+			al.add(new BasicNameValuePair("ap", "" + ap));
+			al.add(new BasicNameValuePair("bc", "" + (Process.info.freeApBcPoint - ap)));
 		}
 		try {
 			result = Process.connect.connectToServer(URL_LEVEL_UP, al);

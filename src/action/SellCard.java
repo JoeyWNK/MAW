@@ -20,19 +20,20 @@ import action.ActionRegistry.Action;
 
 public class SellCard {
 	public static final Action Name = Action.SELL_CARD;
-	
+	private static boolean tried = false;
 	private static final String URL_SELL_CARD = Info.LoginServer + "/connect/app/trunk/sell?cyt=1";
 	private static byte[] response;
 	
 	public static boolean run() throws Exception {
+		GetUserInfo.CardCheck(CreateXML.UserInfo);	
 		if (!Info.autoSellCards) 
 			return false;
 		System.out.print("读取卡片");
 		ArrayList<NameValuePair> post = new ArrayList<NameValuePair>();
 		String SellList = "";
 		int number = 0;
-		for (int i = 0; i < Info.userCardsInfos.size(); i++){
-			UserCardsInfo card = Info.userCardsInfos.get(i);
+		for (int i = 0; i < Process.info.userCardsInfos.size(); i++){
+			UserCardsInfo card = Process.info.userCardsInfos.get(i);
 			if (					
 					(
 						(
@@ -44,7 +45,7 @@ public class SellCard {
 								)								
 							)
 							|| 
-							(Info.CanBeSold.contains(card.master_card_id)
+							(Info.CanBeSold.equals(card.master_card_id)
 								&& card.lv < 5 									
 							)
 						)
@@ -61,7 +62,22 @@ public class SellCard {
 				}
 			}
 		post.add(new BasicNameValuePair("serial_id", SellList));
-		System.out.println("读取完成，总计 " + number + " 张");
+		if (number > 0){
+			tried = false;
+			System.out.println("读取完成，总计 " + number + " 张");
+			}
+		else{
+			if (!tried){
+			System.out.println("无卡可卖,尝试重新登录");
+			Login.run();
+			tried = true;
+			if (run())
+				return true;
+			}
+			System.out.println("无卡可卖");
+			tried = false;
+			return false;
+			}
 		try {
 			response = Process.connect.connectToServer(URL_SELL_CARD, post);
 		} catch (Exception ex) {
@@ -74,7 +90,8 @@ public class SellCard {
 		Document doc;
 		try {
 			doc = Process.ParseXMLBytes(response);
-			GetUserInfo.getUserInfo(doc, true);
+			GetUserInfo.getUserInfo(doc, false);
+			CreateXML.UserInfo = doc;
 			CreateXML.createXML(doc, "SellCards");
 		} catch (Exception ex) {
 /**			ErrorData.currentDataType = ErrorData.DataType.bytes;

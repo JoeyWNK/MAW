@@ -25,6 +25,7 @@ public class FairyHistory {
 	public static boolean run(FairyInfo fairyInfo) throws Exception {
 		Document doc;
 		ArrayList<NameValuePair> al = new ArrayList<NameValuePair>();
+		al.add(new BasicNameValuePair("race_type", fairyInfo.race_type));
 		al.add(new BasicNameValuePair("serial_id", fairyInfo.serialId));
 		al.add(new BasicNameValuePair("user_id", fairyInfo.userId));
 		try {
@@ -64,13 +65,13 @@ public class FairyHistory {
 							>= Process.info.bcMax - 10)/** BC过多 **/
 					|| (Integer.parseInt(xpath.evaluate(
 							"//fairy_history/fairy/time_limit", doc)) <= 600 
-						&& Process.info.bcCurrent >= 40 /** 将加入判断程序 **/
+						&& Process.info.bcCurrent >= 60 /** 将加入判断程序 **/
 						)/** 时间过短 **/
 					)
 				&& (Integer.parseInt(xpath.evaluate(
 					"//fairy_history/fairy/hp", doc)) > 0)
 				&& (Integer.parseInt(xpath.evaluate(
-						"//fairy_history/fairy/time_limit", doc)) > 0)
+					"//fairy_history/fairy/time_limit", doc)) > 0)
 					) 
 			{
 			fairyInfo.currentHp = Integer.parseInt(xpath.evaluate(

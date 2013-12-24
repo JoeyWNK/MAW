@@ -20,6 +20,7 @@ public class ChangeCardItems {
 	public static boolean run(String card, String lr) throws Exception {
 		Document doc;
 		ArrayList<NameValuePair> al = new ArrayList<NameValuePair>();
+		al.add(new BasicNameValuePair("deck_id", "1"));
 		al.add(new BasicNameValuePair("C", card));
 		al.add(new BasicNameValuePair("lr", lr));
 		try {

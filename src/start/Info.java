@@ -13,7 +13,10 @@ import java.util.Stack;
 
 public class Info {
 
-	public static boolean devMode = false ; 
+	
+
+	public static boolean devMode = true ; 
+	public static int key = 2;//RAS公钥
 	
 	// login info
 	public static String LoginId = "";
@@ -32,6 +35,8 @@ public class Info {
 	public static String userAgent = "";
 	public static String runFactor = "0";
 	public static int hasPrivateFairyStopRun = 0;
+	public static int hasPrivateFairyStopRunOriginal = 0;
+	
 	public static boolean log = false;
 	public static boolean simplelog = false;
 	// 用于标记当前是否可以跑图，默认可以
@@ -64,6 +69,10 @@ public class Info {
 	public int friendpoint = 0;
 	public int fullAp = 0;
 	public int fullBc = 0;
+	public int friends = 0;
+	public int friendMax = 0;
+	public int invitations = 0; //好友邀请数
+	public int rewards = 0;
 	
 	// floor info
 	public String floorId = "";
@@ -89,10 +98,37 @@ public class Info {
 	public int exp = 0;
 	public boolean isLvUp = false;
 	public int gather = 0;
-
+	public int gatherID = 74;
 	// event
 	public enum EventType {
-		notLoggedIn, cookieOutOfDate, needFloorInfo, innerMapJump, areaComplete, fairyAppear, fairyTransform, fairyReward, fairyCanBattle, fairyBattleWin, fairyBattleLose, fairyBattleEnd, cardFull, privateFairyAppear, guildTopRetry, guildBattle, guildTop, ticketFull, getFairyReward, needAPBCInfo, levelUp, pvp, getNoNameList, fairyHistory, changeCardItems, getCardItem, fairyInfo
+		notLoggedIn,
+		cookieOutOfDate,
+		needFloorInfo,
+		innerMapJump,
+		areaComplete,
+		fairyAppear,
+		fairyTransform,
+		fairyReward,
+		fairyCanBattle,
+		fairyBattleWin,
+		fairyBattleLose,
+		fairyBattleEnd,
+		cardFull,
+		privateFairyAppear,
+		guildTopRetry,
+		guildBattle,
+		guildTop,
+		ticketFull,
+		getFairyReward,
+		needAPBCInfo,
+		levelUp,
+		pvp,
+		getNoNameList,
+		fairyHistory,
+		changeCardItems,
+		getCardItem,
+		fairyInfo,
+		addFriends
 	}
 
 	public Stack<EventType> events;
@@ -104,15 +140,21 @@ public class Info {
 
 	// 妖精集合
 	public List<FairyInfo> fairyInfos;
+	public boolean hasPartyFairy; //工会妖判断
 
 	// 未攻击过的妖精集合
 	public List<FairyInfo> canBattleFairyInfos;
-
 	public List<FloorInfo> floorInfos;
 
 	// 用户的所有卡片
-	public static List<UserCardsInfo> userCardsInfos;
+	public List<UserCardsInfo> userCardsInfos;
 	public int cardMax;
+	public int fairyRewardCount;
+	public int cardNum;	
+	
+	
+	
+
 	public static ArrayList<String> CanBeSold = new ArrayList<String>();
 	public static boolean autoSellCards = false;
 	public static boolean smartSell = false;
@@ -120,11 +162,14 @@ public class Info {
 	// 卡组信息
 	public static List<CardConfigInfo> cardConfigInfos = new ArrayList<CardConfigInfo>();
 	public static String PVPEvent = "48";
+
+	
 	
 	
 	
 
 	public Info() {
+		userCardsInfos = new ArrayList<UserCardsInfo>();
 		noNameList = new ArrayList<NoNameInfo>();
 		fairyInfos = new ArrayList<FairyInfo>();
 		canBattleFairyInfos = new ArrayList<FairyInfo>();

@@ -13,4 +13,6 @@ public class FloorInfo {
 
 	public String y = "";
 
+	public String race_type = "";
+
 }

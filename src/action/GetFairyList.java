@@ -13,6 +13,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import start.Go;
 import start.Info;
 
 public class GetFairyList {
@@ -20,6 +21,8 @@ public class GetFairyList {
 	// 获取妖精列表
 	private static final String URL_FAIRY_LIST = Info.LoginServer
 			+ "/connect/app/menu/fairyselect?cyt=1";
+	private static final String URL_FAIRY_REWARD = Info.LoginServer
+			+ "/connect/app/menu/fairyrewards?cyt=1";
 
 	// 返回结果
 	private static byte[] result;
@@ -60,6 +63,7 @@ public class GetFairyList {
 			FairyInfo fairyInfo = null;
 			List<FairyInfo> fairyInfos = new ArrayList<FairyInfo>();
 			int run = 0;
+			Process.info.hasPartyFairy = false;
 			if (list.getLength() > 0) {
 				for (int i = 0; i < list.getLength(); i++) {
 					Node f = list.item(i).getFirstChild();
@@ -89,13 +93,15 @@ public class GetFairyList {
 								} else if (f1.getNodeName().equals("lv")) {
 									fairyInfo.lv = f1.getFirstChild()
 											.getNodeValue();
-								}
+								} else if (f1.getNodeName().equals("race_type")) {
+									fairyInfo.race_type = f1.getFirstChild().getNodeValue();
+				                }
 								f1 = f1.getNextSibling();
 							} while (f1 != null);
 						}
 						f = f.getNextSibling();
 					} while (f != null);
-					if (fairyInfo.userId.equals(Process.info.userId)) {
+					if (fairyInfo.userId.equals(Process.info.userId) && !fairyInfo.race_type.equals("12")) {
 						run++;
 						if (Info.isBattlePrivateFariy.equals("1")) {
 							fairyInfos.add(fairyInfo);
@@ -120,6 +126,39 @@ public class GetFairyList {
 				}
 			}
 			Process.info.fairyInfos = fairyInfos;
+			
+			Process.info.fairyRewardCount = Integer.parseInt(xpath.evaluate("//fairy_select/remaining_rewards", doc));
+			if (Process.info.fairyRewardCount >= net.Process.info.cardMax - net.Process.info.cardNum){
+				Go.log("现有奖励:" + Process.info.fairyRewardCount + " 领取作战奖励，并卖卡");
+				ArrayList<NameValuePair> al = new ArrayList<NameValuePair>();
+				try {
+					result = Process.connect.connectToServer(URL_FAIRY_REWARD, al);
+					doc = Process.ParseXMLBytes(result);
+					CreateXML.createXML(doc, "FairyRewards");
+					CreateXML.UserInfo = doc;
+					int rewardCount = ((NodeList)xpath.evaluate("//fairy_rewards/reward_details", doc, XPathConstants.NODESET)).getLength();
+					for (int i = 0 ; i<rewardCount;i++){
+						String msg = "";
+						msg = xpath.evaluate(String.format("//fairy_rewards/reward_details[%d]/fairy/name",i), doc).trim();
+						msg = msg + " Lv." + xpath.evaluate(String.format("//fairy_rewards/reward_details[%d]/fairy/lv",i), doc).trim();
+						msg = msg + " 获得 " + xpath.evaluate(String.format("//fairy_rewards/reward_details[%d]/item_name",i), doc).trim();
+						System.out.println(msg);
+					}
+				} catch (Exception ex) {
+					throw ex;
+				}				
+				try {
+					Go.log("尝试卖卡");
+					if(SellCard.run()){
+						Go.log("卖卡成功");
+						ReturnMain.run();
+						}
+					else
+						Go.log("等待用户");
+				}catch (Exception ex){
+					throw ex;
+				}
+			}
 		} catch (Exception ex) {
 			throw ex;
 		}

@@ -79,6 +79,9 @@ public class GetAreaInfo {
 							floorInfo.x = f.getFirstChild().getNodeValue();
 						} else if (f.getNodeName().equals("y")) {
 							floorInfo.y = f.getFirstChild().getNodeValue();
+						} else if (f.getNodeName().equals("race_type")) {
+							floorInfo.race_type = f.getFirstChild()
+									.getNodeValue();
 						}
 						f = f.getNextSibling();
 					} while (f != null);

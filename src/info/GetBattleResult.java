@@ -1,11 +1,13 @@
 package info;
 
 import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
 import net.Process;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 
 import start.Info.EventType;
 
@@ -44,6 +46,11 @@ public class GetBattleResult {
 			Process.info.events.push(EventType.levelUp);
 		} else {
 			Process.info.isLvUp = false;
+		}
+
+		if(Process.info.battleResult.contains("win")){
+			Process.info.cardNum = ((NodeList)xpath.evaluate("//owner_card_list/user_card", doc, XPathConstants.NODESET)).getLength();
+			CreateXML.UserInfo = doc;
 		}
 	}
 
