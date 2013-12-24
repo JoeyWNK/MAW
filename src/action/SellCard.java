@@ -4,6 +4,7 @@ import info.CreateXML;
 import info.GetUserInfo;
 import info.UserCardsInfo;
 
+import java.io.FileWriter;
 import java.util.ArrayList;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
@@ -37,15 +38,12 @@ public class SellCard {
 			if (					
 					(
 						(
-							(Info.smartSell 
-								&& (
-									card.lv < 5 
-									&& (card.sale_price > 60 && card.sale_price < 200) ||(card.sale_price == 600)
-									&& (card.hp > 5 || card.atk > 5)
-								)								
-							)
-							|| 
-							(Info.CanBeSold.equals(card.master_card_id)
+							(Info.smartSell && ( card.sale_price < 200 && card.sale_price > 20 
+									&& card.atk % 10 != 0 
+									&& card.hp % 10 != 0)
+									)
+							||
+							(Info.CanBeSold.contains(card.master_card_id + "")
 								&& card.lv < 5 									
 							)
 						)
@@ -59,6 +57,14 @@ public class SellCard {
 				SellList += "," + card.serialId;
 				System.out.print(".");
 				number++;
+				try {
+					FileWriter fileWriter=new FileWriter("CardSell.log", true);
+					fileWriter.write(card.master_card_id +" " + card.sale_price + " " + card.lv);
+					fileWriter.write("\r\n");						
+					fileWriter.close();
+				} catch(Exception e) {
+					
+				}
 				}
 			}
 		post.add(new BasicNameValuePair("serial_id", SellList));

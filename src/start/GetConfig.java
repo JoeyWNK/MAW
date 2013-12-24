@@ -81,9 +81,9 @@ public class GetConfig {
 			
 			System.out.print("读取行动设定");
 			Info.autoSellCards = xpath.evaluate("/config/SellCards",
-					doc).trim() != "0";
+					doc).trim() == "1";
 			Info.smartSell= xpath.evaluate("/config/smartSell",
-					doc).trim() != "0";
+					doc).trim() == "1";
 			Info.isPVP = xpath.evaluate("/config/option/is_pvp", doc).trim();
 			Info.PVPEvent = xpath.evaluate("/config/option/pvp_eventid", doc).trim();
 			Info.isRun = xpath.evaluate("/config/option/is_run", doc).trim();
