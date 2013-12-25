@@ -43,7 +43,10 @@ public class ExceptionCatch {
 						net.Process.update  = true;
 						net.Process.connect = new Connect();
 						throw new Exception("103");
-				}
+				}else if (errorCode.equals("8000") && errorMessage.replace("\n", "，").contains("成功")) {
+					Go.log("成功领取\n");
+					return false;
+					}	
 				Go.log("错误code：" + errorCode + ",错误内容："
 						+ errorMessage.replace("\n", "，"));
 				return true;

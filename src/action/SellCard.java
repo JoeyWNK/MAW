@@ -5,7 +5,11 @@ import info.GetUserInfo;
 import info.UserCardsInfo;
 
 import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
 
@@ -24,8 +28,9 @@ public class SellCard {
 	private static boolean tried = false;
 	private static final String URL_SELL_CARD = Info.LoginServer + "/connect/app/trunk/sell?cyt=1";
 	private static byte[] response;
-	
-	public static boolean run() throws Exception {
+	static SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+	static FileWriter fileWriter = null;
+	public static boolean run() throws Exception {		
 		GetUserInfo.CardCheck(CreateXML.UserInfo);	
 		if (!Info.autoSellCards) 
 			return false;
@@ -33,6 +38,12 @@ public class SellCard {
 		ArrayList<NameValuePair> post = new ArrayList<NameValuePair>();
 		String SellList = "";
 		int number = 0;
+		int price = 0;
+		try {
+			if(Info.log){
+				fileWriter=new FileWriter("CardSell.log", true);
+				fileWriter.write(df.format(new Date())+"\r\n");
+			}
 		for (int i = 0; i < Process.info.userCardsInfos.size(); i++){
 			UserCardsInfo card = Process.info.userCardsInfos.get(i);
 			if (					
@@ -58,16 +69,19 @@ public class SellCard {
 				SellList += "," + card.serialId;
 				System.out.print(".");
 				number++;
-				try {
-					FileWriter fileWriter=new FileWriter("CardSell.log", true);
-					fileWriter.write(card.master_card_id +" " + card.sale_price + " " + card.lv);
-					fileWriter.write("\r\n");						
-					fileWriter.close();
-				} catch(Exception e) {
+				price =+ card.sale_price;
+				if(Info.log)
+					fileWriter.write(card.master_card_id +" " + card.sale_price + " " + card.lv +"\r\n");						
 					
 				}
-				}
 			}
+		if(Info.log)
+			fileWriter.write("总计 " + number + " 张 " + price + "Gold\r\n");
+			fileWriter.close();
+		} catch(IOException e) {
+			System.out.println("无法生成记录");
+			Info.log = false;
+		}
 		post.add(new BasicNameValuePair("serial_id", SellList));
 		if (number > 0){
 			tried = false;

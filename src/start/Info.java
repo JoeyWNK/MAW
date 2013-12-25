@@ -94,7 +94,7 @@ public class Info {
 	public String battleResult = "";
 	public int gold = 0;
 	// 默认10000
-	public int nextExp = 0;
+	public int nextExp = 1000;
 	public int exp = 0;
 	public boolean isLvUp = false;
 	public int gather = 0;

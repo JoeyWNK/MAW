@@ -11,7 +11,7 @@ import start.Go;
 import start.Info;
 
 public class LevelUp {
-	// 获取无名亚瑟
+	
 	public static final String URL_LEVEL_UP = Info.LoginServer
 			+ "/connect/app/town/pointsetting?cyt=1";
 

@@ -24,6 +24,7 @@ import start.Think;
 import action.ActionRegistry.Action;
 import action.BattleAreaBoss;
 import action.ChangeCardItems;
+import action.CheckFairyReward;
 import action.FairyBattle;
 import action.FairyHistory;
 import action.FloorRun;
@@ -211,6 +212,9 @@ public class Process {
 			}
 			break;
 		case GET_FAIRY_LIST:
+			if (info.nextExp <= 3 * info.apCurrent * 1.2){
+				Info.hasPrivateFairyStopRun = 0;
+			}
 			if (info.freeApBcPoint > 0) {
 				info.events.push(Info.EventType.levelUp);
 				break;
@@ -243,6 +247,11 @@ public class Process {
 					info.events.push(Info.EventType.addFriends);
 					break;
 				}**/
+				if(CheckFairyReward.run()){
+					info.events.push(Info.EventType.fairyAppear);
+					break;
+				}
+					
 				double wait = Info.waitTime + Info.timepoverty + 2
 						* Math.random();
 				if (wait > 300)
@@ -268,6 +277,9 @@ public class Process {
 			}
 			break;
 		case PVP:
+			if (info.nextExp <= 3 * info.apCurrent * 1.2){
+				Info.hasPrivateFairyStopRun = 0;
+			}
 			ChangeCardItems.run(Info.pvpCard, Info.pvpLr);
 			for (NoNameInfo noName : info.noNameList) {
 				// 如果ap大于当前地图所需cost则开始跑图
@@ -325,6 +337,9 @@ public class Process {
 			}
 			break;
 		case FAIRY_HISTORY:
+			if (info.nextExp <= 3 * info.apCurrent * 1.2){
+				Info.hasPrivateFairyStopRun = 0;
+			}
 			for (FairyInfo fairyInfo : info.fairyInfos) {
 				FairyHistory.run(fairyInfo);
 			}
@@ -350,6 +365,10 @@ public class Process {
 					break;
 				}
 				
+				if(CheckFairyReward.run()){
+					info.events.push(Info.EventType.fairyAppear);
+					break;
+				}
 				
 				double wait = Info.waitTime + Info.timepoverty + 2
 						* Math.random();
@@ -488,6 +507,7 @@ public class Process {
 			if (LevelUp.run()) {
 				Process.info.isLvUp = false;
 				Process.info.freeApBcPoint = 0;
+				Info.hasPrivateFairyStopRun = Info.hasPrivateFairyStopRunOriginal;
 				Go.log("加点完毕");
 				Go.log(info.userName + " 等级:" + info.userLv + " AP:"
 						+ info.apCurrent + "/" + info.apMax + " BC:"
@@ -600,7 +620,7 @@ public class Process {
 								Info.maptimelimit = true;
 								TimeManager.found = true;
 							}
-							if (Process.info.nextExp <= Process.info.getExp * Process.info.apCurrent / Process.info.floorCost * 1.2){
+							if (info.nextExp <= info.getExp * info.apCurrent / info.floorCost * 1.2){
 								Info.hasPrivateFairyStopRun = 0;
 							}
 							// 地图踏破则更新楼层
