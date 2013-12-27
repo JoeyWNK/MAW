@@ -22,7 +22,13 @@ public class Go {
 		try {
 			System.out.println("正在启动");
 			System.out.println("加载配置文件……");
-			GetConfig.readConfig(args[0]);
+			if(args.length == 1 )
+				GetConfig.readConfig(args[0]);
+			else{
+				GUI gui = new GUI();
+				gui.run();
+				System.exit(0);
+			}
 			System.out.println("加载完成");
 			System.out.println("启动程序……");
 			Process proc = new Process();
@@ -33,6 +39,7 @@ public class Go {
 				proc.start();
 			}
 		} catch (Exception e) {
+			System.out.print(e.toString());
 			log("文件解析错误");
 		}
 	}

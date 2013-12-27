@@ -25,7 +25,7 @@ import action.ActionRegistry.Action;
 
 public class SellCard {
 	public static final Action Name = Action.SELL_CARD;
-	private static boolean tried = false;
+	public static boolean tried = false;
 	private static final String URL_SELL_CARD = Info.LoginServer + "/connect/app/trunk/sell?cyt=1";
 	private static byte[] response;
 	static SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
@@ -69,7 +69,7 @@ public class SellCard {
 				SellList += "," + card.serialId;
 				System.out.print(".");
 				number++;
-				price =+ card.sale_price;
+				price = price + card.sale_price;
 				if(Info.log)
 					fileWriter.write(card.master_card_id +" " + card.sale_price + " " + card.lv +"\r\n");						
 					

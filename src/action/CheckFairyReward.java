@@ -23,7 +23,7 @@ public class CheckFairyReward {
 			+ "/connect/app/menu/fairyrewards?cyt=1";
 	
 	public static boolean run() throws Exception {
-		if (Info.autoSellCards && Process.info.fairyRewardCount >= net.Process.info.cardMax - net.Process.info.cardNum){
+		if (!SellCard.tried && Info.autoSellCards && Process.info.fairyRewardCount >= net.Process.info.cardMax - net.Process.info.cardNum){
 			Document doc;
 			byte[] result;
 			Go.log("现有奖励:" + Process.info.fairyRewardCount + " 领取作战奖励，并卖卡");

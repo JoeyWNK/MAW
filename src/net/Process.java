@@ -83,6 +83,7 @@ public class Process {
 						Go.log(e1.getMessage());
 					} finally {
 						info.events.clear();
+						SellCard.tried = false;
 						info.events.push(Info.EventType.cookieOutOfDate);
 					}
 				}else if (e.getMessage().contains("8000")){
@@ -197,7 +198,7 @@ public class Process {
 					Go.log(str);
 //					if(loop == 0)
 //					RewardCheck.run();
-					if (info.cardNum >= info.cardMax){
+					if (!SellCard.tried && info.cardNum >= info.cardMax){
 						Go.log("现有卡片 " + info.cardNum +"/"+ info.cardMax + " ,开始卖卡或合成");
 						info.events.push(Info.EventType.cardFull);
 						break;
@@ -280,7 +281,14 @@ public class Process {
 			if (info.nextExp <= 3 * info.apCurrent * 1.2){
 				Info.hasPrivateFairyStopRun = 0;
 			}
-			ChangeCardItems.run(Info.pvpCard, Info.pvpLr);
+			try{
+				ChangeCardItems.run(Info.pvpCard, Info.pvpLr);
+			}catch(Exception e){
+				if (e.toString().contains("8000") && e.toString().contains("储存失败")){
+					Info.pvpCard = Info.wolf;
+					Info.pvpLr = Info.wolfLr;
+					}
+			}			
 			for (NoNameInfo noName : info.noNameList) {
 				// 如果ap大于当前地图所需cost则开始跑图
 				if (info.apCurrent >= info.floorCost && Info.isRun.equals("1")
@@ -386,7 +394,7 @@ public class Process {
 				break;
 			}
 		case PRIVATE_FAIRY_BATTLE:
-			if (info.cardNum >= info.cardMax){
+			if (!SellCard.tried && info.cardNum >= info.cardMax){
 				Go.log("现有卡片 " + info.cardNum +"/"+ info.cardMax + " ,开始卖卡或合成");
 				if(SellCard.run()){
 					Go.log("卖卡成功");
@@ -422,7 +430,7 @@ public class Process {
 					Go.log("当前BC" + (Info.lickCost - info.bcCurrent) + "，等待回复……");
 					Thread.sleep(1000 * 60 * (Info.lickCost - info.bcCurrent));
 				}
-				if (info.cardNum > info.cardMax){
+				if (!SellCard.tried && info.cardNum > info.cardMax){
 					Go.log("现有卡片 " + info.cardNum +"/"+ info.cardMax + " ,开始卖卡或合成");
 					if(SellCard.run()){
 						Go.log("卖卡成功");
@@ -451,8 +459,14 @@ public class Process {
 								&& info.bcCurrent >= cardConfigInfo.cardCost
 								&& i.doubleValue() >= cardConfigInfo.hp
 								&& cardConfigInfo.wake == 1) {
-							ChangeCardItems.run(cardConfigInfo.cardItem,
+							try{
+								ChangeCardItems.run(cardConfigInfo.cardItem,
 									cardConfigInfo.cardLr);
+							}catch(Exception e){
+								if (e.toString().contains("8000") && e.toString().contains("失败")){
+									Info.cardConfigInfos.remove(cardConfigInfo);
+									}
+							}
 							break;
 						}
 					}
@@ -463,8 +477,14 @@ public class Process {
 								&& info.bcCurrent >= cardConfigInfo.cardCost
 								&& i.doubleValue() >= cardConfigInfo.hp
 								&& cardConfigInfo.wake == 0) {
-							ChangeCardItems.run(cardConfigInfo.cardItem,
+							try{
+								ChangeCardItems.run(cardConfigInfo.cardItem,
 									cardConfigInfo.cardLr);
+							}catch(Exception e){
+								if (e.toString().contains("8000") && e.toString().contains("储存失败")){
+									Info.cardConfigInfos.remove(cardConfigInfo);
+									}
+							}
 							break;
 						}
 					}
@@ -551,6 +571,7 @@ public class Process {
 								if (!Process.info.hasPartyFairy && fInfo.race_type.equals("12") && Info.canRun == 0  ){
 									floorInfo = fInfo;
 									}
+								break;
 								}
 						}
 						GetFloorInfo.run(floorInfo, false);
@@ -574,7 +595,7 @@ public class Process {
 					GetFloorInfo.run(floorInfo, true);
 					isClear = true;
 				}
-				if (info.cardNum >= info.cardMax){
+				if (!SellCard.tried && info.cardNum >= info.cardMax){
 					Go.log("现有卡片 " + info.cardNum +"/"+ info.cardMax + " ,开始卖卡或合成");
 					if(SellCard.run()){
 						Go.log("卖卡成功");
@@ -670,7 +691,7 @@ public class Process {
 								info.events.push(Info.EventType.fairyAppear);
 								break;
 							}
-							if (info.cardNum >= info.cardMax){
+							if (!SellCard.tried && info.cardNum >= info.cardMax){
 								Go.log("现有卡片 " + info.cardNum +"/"+ info.cardMax + " ,开始卖卡或合成");
 								if(SellCard.run()){
 									Go.log("卖卡成功");
@@ -688,7 +709,14 @@ public class Process {
 				} else {
 					if (info.bossId != 0) {
 						Go.log("秘境守护者出现！");
-						ChangeCardItems.run(Info.battleBoss, Info.battleBossLr);
+						try{
+							ChangeCardItems.run(Info.battleBoss, Info.battleBossLr);
+						}catch(Exception e){
+							if (e.toString().contains("8000") && e.toString().contains("储存失败")){
+								Info.battleBoss = Info.wolf;
+								Info.battleBossLr = Info.wolfLr;
+								}
+						}
 						if (BattleAreaBoss.run(floorInfo)) {
 						info.events.push(Info.EventType.needFloorInfo);
 						break;
