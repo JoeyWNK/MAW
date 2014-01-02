@@ -229,6 +229,7 @@ public class Process {
 				// 如果ap大于当前地图所需cost则开始跑图
 				if (info.apCurrent >= info.floorCost && Info.isRun.equals("1")
 						&& info.bcCurrent < Info.stopRunWhenBcMore
+						&& info.apCurrent > Info.stopRunWhenApLess
 						&& Info.canRun == 1 || info.apCurrent > info.apMax - 10) {
 					Go.log("开始跑图");
 					info.events.push(Info.EventType.needFloorInfo);
@@ -294,7 +295,7 @@ public class Process {
 				// 如果ap大于当前地图所需cost则开始跑图
 				if (info.apCurrent >= info.floorCost && Info.isRun.equals("1")
 						&& info.bcCurrent < Info.stopRunWhenBcMore
-
+						&& info.apCurrent > Info.stopRunWhenApLess
 						&& Info.canRun == 1 || info.apCurrent > info.apMax - 10) {
 					Go.log("开始跑图");
 					info.events.push(Info.EventType.needFloorInfo);
@@ -360,7 +361,7 @@ public class Process {
 				// 如果ap大于当前地图所需cost则开始跑图
 				if (info.apCurrent >= info.floorCost && Info.isRun.equals("1")
 						&& info.bcCurrent < Info.stopRunWhenBcMore
-
+						&& info.apCurrent > Info.stopRunWhenApLess
 						&& Info.canRun == 1 || info.apCurrent > info.apMax - 10) {
 					Go.log("开始跑图");
 					info.events.push(Info.EventType.needFloorInfo);
@@ -731,8 +732,14 @@ public class Process {
 								info.events.push(Info.EventType.fairyAppear);
 								break;
 							}
+							if (info.apCurrent > Info.stopRunWhenApLess) {
+								Go.log("AP低于设定值，停止跑图");
+								info.events.push(Info.EventType.fairyAppear);
+								break;
+							}
 							if (!(info.apCurrent >= info.floorCost && Info.isRun.equals("1")
 									&& info.bcCurrent < Info.stopRunWhenBcMore
+									&& info.apCurrent > Info.stopRunWhenApLess
 									&& Info.canRun == 1 || info.apCurrent > info.apMax - 10)){
 								Go.log("停止跑图");
 								info.events.push(Info.EventType.fairyAppear);
