@@ -16,6 +16,7 @@ import javax.xml.xpath.XPathFactory;
 import net.Process;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -23,7 +24,6 @@ public class GetConfig {
 
 	private static final String SERVER_PART1 = "http://game";
 	private static final String SERVER_PART2 = "-CBT.ma.sdo.com:10001";
-	@SuppressWarnings("unused")
 	private static String PATH = "";
 	private static XPath xpath;
 	private static Document doc;
@@ -82,6 +82,9 @@ public class GetConfig {
 			System.out.print("读取行动设定");
 			Info.autoSellCards = xpath.evaluate("/config/SellCards",
 					doc).trim().equals("1");
+			Info.CheckFairyRewards = xpath
+					.evaluate("/config/CheckFairyRewards", doc).trim()
+					.equals("1");
 			Info.smartSell= xpath.evaluate("/config/smartSell",
 					doc).trim().equals("1");
 			Info.isPVP = xpath.evaluate("/config/option/is_pvp", doc).trim();
@@ -124,7 +127,7 @@ public class GetConfig {
 						MAPConfigInfo.day = Integer.parseInt(f
 								.getFirstChild().getNodeValue().trim());
 						} else if (f.getNodeName().equals("hour")) {
-							if (xpath.evaluate("/config/mapsettings/hastimelimit", doc).contains("true")){
+							if (xpath.evaluate("/config/mapsettings/hastimelimit", doc).equals("true")){
 								MAPConfigInfo.maptimelimitDown = Integer.parseInt(f
 										.getFirstChild().getNodeValue().trim()
 										.split("-")[0]);
@@ -136,7 +139,9 @@ public class GetConfig {
 						} else if (f.getNodeName().equals("daily")) {
 							MAPConfigInfo.daily = f.getFirstChild().getNodeValue().trim();							
 						} else if (f.getNodeName().equals("fixed")) {
-							MAPConfigInfo.fixed = f.getFirstChild().getNodeValue().contains("ture");							
+							MAPConfigInfo.fixed = f.getFirstChild().getNodeValue().trim();
+							if(MAPConfigInfo.fixed == null || MAPConfigInfo.fixed == "")
+								MAPConfigInfo.fixed = "12";
 						}
 						f = f.getNextSibling();
 						} catch (Exception ex){
@@ -159,6 +164,10 @@ public class GetConfig {
 			}
 			System.out.println("[OK]");
 			System.out.print("读取战斗卡组");
+			Info.fairyType = xpath.evaluate("/config/card/fairyType", doc)
+					.trim();
+			if (Info.fairyType.equals(""))
+				Info.fairyType = "1234";
 			String pvpCard = xpath.evaluate("/config/card/pvp/pvp_card", doc)
 					.trim();
 			if (!pvpCard.equals("")) {
@@ -244,11 +253,36 @@ public class GetConfig {
 		}
 	}
 
-	public static void saveConfig(String userAgent, int i) {
-		try{
+	public static void saveConfig(String content, int i) {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			InputStream is = null;
+			try {
+				is = new FileInputStream(PATH);
+				byte[] b = new byte[0x2800];
+				int n;
+				while ((n = is.read(b)) != -1)
+					baos.write(b, 0, n);
+			} catch (Exception ex) {
+				Go.log("写入失败");
+			} finally {
+				try {
+					if (is != null) {
+						is.close();
+					}
+				} catch (Exception ex) {
+					Go.log("写入失败");
+				}
+			}
+			try {
+				doc = Process.ParseXMLBytes(baos.toByteArray());
+				XPathFactory factory = XPathFactory.newInstance();
+				xpath = factory.newXPath();
 			switch(i){
 			
 			case 1030:
+				Element CilentID = doc.createElement("/config/user_agent");
+				doc.appendChild(CilentID);
+				CilentID = (Element)(Node)xpath.evaluate("/config/user_agent", doc, XPathConstants.NODE);
 				
 				}
 			}catch(Exception e){

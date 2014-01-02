@@ -36,10 +36,17 @@ public class GetBattleResult {
 			spec = xpath.evaluate("//battle_result/special_item/after_count", doc);
 		}
 		if (spec.length() != 0) {
+			if (xpath.evaluate("/response/body/race_type", doc).equals("12")){
+				Process.info.GuildGather = Integer.parseInt(spec);
+				Process.info.GuildGatherID = Integer.parseInt(xpath.evaluate(
+						"//battle_result/special_item/item_id", doc));
+			}
+			Process.info.gatherID = Integer.parseInt(xpath.evaluate(
+					"//battle_result/special_item/item_id", doc));
 			Process.info.gather = Integer.parseInt(spec);
 		} else {
 			Process.info.gather = 0;
-		}
+		}		
 		// 战斗后经验比战斗前多的话，说明升级了
 		if (after_exp > before_exp) {
 			Process.info.isLvUp = true;

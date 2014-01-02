@@ -28,6 +28,7 @@ public class TimeManager {
 					Info.maptimelimitDown = MapConfigInfo.maptimelimitDown;
 					Info.maptimelimitUp = MapConfigInfo.maptimelimitUp;
 					Info.dayFirst = MapConfigInfo.daily;
+					Info.fix = MapConfigInfo.fixed;
 					String str = "\n"+(df.format(new Date()));
 					if (MapConfigInfo.maptimelimitUp != -1)
 						str += " 限时秘境时段 " + Info.maptimelimitDown + ":00-" + Info.maptimelimitUp + ":00";

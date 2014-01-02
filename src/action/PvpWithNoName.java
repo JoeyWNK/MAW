@@ -23,9 +23,16 @@ public class PvpWithNoName {
 	public static boolean run(NoNameInfo nameInfo) throws Exception {
 		Document doc;
 		ArrayList<NameValuePair> al = new ArrayList<NameValuePair>();
-		al.add(new BasicNameValuePair("battle_type", "0"));
-		al.add(new BasicNameValuePair("event_id", Info.PVPEvent));
-		al.add(new BasicNameValuePair("user_id", nameInfo.userId));
+		if (Info.PVPEvent.equals("0")){
+			al.add(new BasicNameValuePair("user_id", nameInfo.userId));
+			al.add(new BasicNameValuePair("parts_id","0"));
+			al.add(new BasicNameValuePair("lake_id","0"));
+		} else {
+			al.add(new BasicNameValuePair("battle_type", "0"));
+			al.add(new BasicNameValuePair("event_id", Info.PVPEvent));
+			al.add(new BasicNameValuePair("user_id", nameInfo.userId));
+				
+		}
 //		al.add(new BasicNameValuePair("parts_id", "0"));
 //		al.add(new BasicNameValuePair("lake_id", "0"));
 //		ArrayList<NameValuePair> a2 = new ArrayList<NameValuePair>();

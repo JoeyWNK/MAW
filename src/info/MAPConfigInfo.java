@@ -9,6 +9,9 @@ public class MAPConfigInfo {
 	
 	public String daily;
 	
-	public boolean fixed;
+	public String fixed;
+	/**
+	 *  1 为普通  2为公会
+	 */
 
 }

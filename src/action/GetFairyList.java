@@ -2,6 +2,8 @@ package action;
 
 import info.CreateXML;
 import info.FairyInfo;
+
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.xpath.XPath;
@@ -97,6 +99,19 @@ public class GetFairyList {
 						}
 						f = f.getNextSibling();
 					} while (f != null);
+					if (fairyInfo.race_type.equals("12")){
+						if (URLEncoder.encode(fairyInfo.name, "utf-8").contains(
+								"%E7%9A%84")){
+							fairyInfo.type = 4;
+						} else {
+							fairyInfo.type = 3;
+							}
+					}else if (URLEncoder.encode(fairyInfo.name, "utf-8").contains(
+							"%E7%9A%84")){
+						fairyInfo.type = 2;
+					}else {
+						fairyInfo.type = 1;
+						}
 					if (fairyInfo.userId.equals(Process.info.userId) && !fairyInfo.race_type.equals("12")) {
 						run++;
 						if (Info.isBattlePrivateFariy.equals("1")) {

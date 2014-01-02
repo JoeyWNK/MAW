@@ -15,6 +15,7 @@ public class Info {
 
 	
 
+	
 	public static boolean devMode = true ; 
 	public static int key = 2;//RAS公钥
 	
@@ -97,6 +98,8 @@ public class Info {
 	public int nextExp = 1000;
 	public int exp = 0;
 	public boolean isLvUp = false;
+	public int GuildGather = 0;
+	public int GuildGatherID = 78;
 	public int gather = 0;
 	public int gatherID = 74;
 	// event
@@ -139,8 +142,10 @@ public class Info {
 	public List<NoNameInfo> noNameList;
 
 	// 妖精集合
+	public static boolean CheckFairyRewards = false;
 	public List<FairyInfo> fairyInfos;
 	public boolean hasPartyFairy; //工会妖判断
+	public static String fairyType = null;//偏好妖精类型
 
 	// 未攻击过的妖精集合
 	public List<FairyInfo> canBattleFairyInfos;
@@ -162,6 +167,7 @@ public class Info {
 	// 卡组信息
 	public static List<CardConfigInfo> cardConfigInfos = new ArrayList<CardConfigInfo>();
 	public static String PVPEvent = "48";
+	public static String fix = "12";
 
 	
 	

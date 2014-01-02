@@ -8,6 +8,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import start.Go;
@@ -15,7 +16,7 @@ import start.Info;
 
 import net.Process;
 
-public class GetUserInfo {
+public class GetUserInfo  {
 
 	public static void getUserInfo(Document doc, boolean getId)
 			throws Exception {
@@ -88,23 +89,35 @@ public class GetUserInfo {
 	public static void CardCheck(Document doc){
 		XPathFactory factory = XPathFactory.newInstance();
 		XPath xpath = factory.newXPath();
-		int cardCount;
 		try {
-			cardCount = ((NodeList)xpath.evaluate("//owner_card_list/user_card", doc, XPathConstants.NODESET)).getLength();
-			ArrayList<UserCardsInfo> CardList = new ArrayList<UserCardsInfo>();
-		System.out.print("获取用户卡组");
-		for (int i = 1; i < cardCount + 1; i++) {
+			NodeList list = (NodeList) xpath.evaluate(
+					"//owner_card_list/user_card", doc,
+					XPathConstants.NODESET);
+			ArrayList<UserCardsInfo> CardList = new ArrayList<>();
 			UserCardsInfo c = new UserCardsInfo();
-			String p = String.format("//owner_card_list/user_card[%d]", i);
-			c.serialId = Integer.parseInt(xpath.evaluate(p+"/serial_id", doc));
-			c.master_card_id = Integer.parseInt(xpath.evaluate(p+"/master_card_id", doc));
-			c.lv = Integer.parseInt(xpath.evaluate(p+"/lv", doc));
-			c.hp = Integer.parseInt(xpath.evaluate(p+"/hp", doc));
-			c.atk = Integer.parseInt(xpath.evaluate(p+"/power", doc));
-			c.sale_price = Integer.parseInt(xpath.evaluate(p+"/sale_price", doc));
-			c.holography = xpath.evaluate(p+"/holography", doc).equals("1");
+		System.out.print("获取用户卡组");
+		for (int i = 0; i < list.getLength(); ++i) {
+			Node f = list.item(i).getFirstChild();
+			c = new UserCardsInfo();
+			do {				
+				if(f.getNodeName().equals("serial_id"))
+					c.serialId = Integer.parseInt(f.getFirstChild().getNodeValue());
+				else if(f.getNodeName().equals("master_card_id"))
+					c.master_card_id = Integer.parseInt(f.getFirstChild().getNodeValue());
+				else if(f.getNodeName().equals("lv"))
+					c.lv = Integer.parseInt(f.getFirstChild().getNodeValue());
+				else if(f.getNodeName().equals("hp"))
+					c.hp = Integer.parseInt(f.getFirstChild().getNodeValue());
+				else if(f.getNodeName().equals("power"))
+					c.atk = Integer.parseInt(f.getFirstChild().getNodeValue());
+				else if(f.getNodeName().equals("sale_price"))
+					c.sale_price = Integer.parseInt(f.getFirstChild().getNodeValue());
+				else if(f.getNodeName().equals("holography"))
+					c.holography = f.getFirstChild().getNodeValue().equals("1");
+				f = f.getNextSibling();
+			} while (f != null);
 			CardList.add(c);
-			if (i % (int)((cardCount + 1)/10) == 0 )
+			if (i % (int)(( list.getLength() + 1)/10) == 0 )
 				System.out.print(".");
 			}	
 		Process.info.userCardsInfos = CardList;

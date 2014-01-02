@@ -15,6 +15,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import start.Go;
 import start.Info;
 
 public class GetAreaInfo {
@@ -85,7 +86,16 @@ public class GetAreaInfo {
 						}
 						f = f.getNextSibling();
 					} while (f != null);
-
+					if (Info.fix.equals("1") && floorInfo.race_type.equals("12")){
+						continue;
+					}
+					else if (Info.fix.equals("2") && floorInfo.race_type.equals("2")){
+						if(Process.info.hasPartyFairy){
+							Info.canRun = 0;
+							Go.log("有公会妖!");
+						}
+						continue;
+					}						
 					if (Info.whatMap != 0) {
 						if (floorInfo.area_type.equals(Info.runFactor)) {
 							floorInfos.add(floorInfo);

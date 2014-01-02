@@ -22,6 +22,7 @@ import start.Go;
 import start.Info;
 import start.Think;
 import action.ActionRegistry.Action;
+import action.AddFriends;
 import action.BattleAreaBoss;
 import action.ChangeCardItems;
 import action.CheckFairyReward;
@@ -243,11 +244,11 @@ public class Process {
 /**				if(loop % 140 == 0)
 					RewardCheck.run();
 				if (loop < Integer.MAX_VALUE -10 )
-				loop ++;
+				loop ++; **/
 				if (info.friends != info.friendMax && info.invitations > 0 ){
 					info.events.push(Info.EventType.addFriends);
 					break;
-				}**/
+				}
 				if(CheckFairyReward.run()){
 					info.events.push(Info.EventType.fairyAppear);
 					break;
@@ -373,6 +374,11 @@ public class Process {
 					break;
 				}
 				
+				if (info.friends != info.friendMax && info.invitations > 0 ){
+					info.events.push(Info.EventType.addFriends);
+					break;
+				}
+				
 				if(CheckFairyReward.run()){
 					info.events.push(Info.EventType.fairyAppear);
 					break;
@@ -451,41 +457,43 @@ public class Process {
 				ChangeCardItems.run(Info.wolf, Info.wolfLr);
 				// 一般来说，名字带"的"的都是觉醒……中文做utf编码处理，防止乱码
 				// 如果是觉醒使用觉醒卡组
-				if (URLEncoder.encode(fairyInfo.name, "utf-8").contains(
-						"%E7%9A%84")) {
-					for (CardConfigInfo cardConfigInfo : Info.cardConfigInfos) {
-						if (fairyLv >= cardConfigInfo.lvMin
-								&& fairyLv <= cardConfigInfo.lvMax
-								&& info.bcCurrent >= cardConfigInfo.cardCost
-								&& i.doubleValue() >= cardConfigInfo.hp
-								&& cardConfigInfo.wake == 1) {
-							try{
-								ChangeCardItems.run(cardConfigInfo.cardItem,
-									cardConfigInfo.cardLr);
-							}catch(Exception e){
-								if (e.toString().contains("8000") && e.toString().contains("失败")){
-									Info.cardConfigInfos.remove(cardConfigInfo);
-									}
+				if (Info.fairyType.contains(fairyInfo.type + "")){
+					if (URLEncoder.encode(fairyInfo.name, "utf-8").contains(
+							"%E7%9A%84")) {
+						for (CardConfigInfo cardConfigInfo : Info.cardConfigInfos) {
+							if (fairyLv >= cardConfigInfo.lvMin
+									&& fairyLv <= cardConfigInfo.lvMax
+									&& info.bcCurrent >= cardConfigInfo.cardCost
+									&& i.doubleValue() >= cardConfigInfo.hp
+									&& cardConfigInfo.wake == 1) {
+								try{
+									ChangeCardItems.run(cardConfigInfo.cardItem,
+										cardConfigInfo.cardLr);
+								}catch(Exception e){
+									if (e.toString().contains("8000") && e.toString().contains("失败")){
+										Info.cardConfigInfos.remove(cardConfigInfo);
+										}
+								}
+								break;
 							}
-							break;
 						}
-					}
-				} else {
-					for (CardConfigInfo cardConfigInfo : Info.cardConfigInfos) {
-						if (fairyLv >= cardConfigInfo.lvMin
-								&& fairyLv <= cardConfigInfo.lvMax
-								&& info.bcCurrent >= cardConfigInfo.cardCost
-								&& i.doubleValue() >= cardConfigInfo.hp
-								&& cardConfigInfo.wake == 0) {
-							try{
-								ChangeCardItems.run(cardConfigInfo.cardItem,
-									cardConfigInfo.cardLr);
-							}catch(Exception e){
-								if (e.toString().contains("8000") && e.toString().contains("储存失败")){
-									Info.cardConfigInfos.remove(cardConfigInfo);
-									}
+					} else {
+						for (CardConfigInfo cardConfigInfo : Info.cardConfigInfos) {
+							if (fairyLv >= cardConfigInfo.lvMin
+									&& fairyLv <= cardConfigInfo.lvMax
+									&& info.bcCurrent >= cardConfigInfo.cardCost
+									&& i.doubleValue() >= cardConfigInfo.hp
+									&& cardConfigInfo.wake == 0) {
+								try{
+									ChangeCardItems.run(cardConfigInfo.cardItem,
+										cardConfigInfo.cardLr);
+								}catch(Exception e){
+									if (e.toString().contains("8000") && e.toString().contains("失败")){
+										Info.cardConfigInfos.remove(cardConfigInfo);
+										}
+								}
+								break;
 							}
-							break;
 						}
 					}
 				}
@@ -495,8 +503,12 @@ public class Process {
 								+ " 金币:" + info.gold + " AP:"
 								+ info.apCurrent + "/" + info.apMax + " BC:"
 								+ info.bcCurrent + "/" + info.bcMax);
-						if (info.gather != 0)
-							str = str + " 收集品:" + info.gather;
+						if (info.gather != 0 || info.GuildGather != 0){
+							if(fairyInfo.race_type.equals("12"))
+								str = str + " 公会收集品:" + info.GuildGather;
+							else
+								str = str + " 收集品:" + info.gather;
+							}
 						Go.log(str);
 						Go.log("升级了！");
 						if(!TimeManager.found || TimeManager.done)
@@ -508,8 +520,12 @@ public class Process {
 								+ info.exp + "/" + info.nextExp + " 金币:" + info.gold + " AP:"
 								+ info.apCurrent + "/" + info.apMax + " BC:"
 								+ info.bcCurrent + "/" + info.bcMax);
-						if (info.gather != 0)
-							str = str + " 收集品:" + info.gather;
+						if (info.gather != 0 || info.GuildGather != 0){
+							if(fairyInfo.race_type.equals("12"))
+								str = str + " 公会收集品:" + info.GuildGather;
+							else
+								str = str + " 收集品:" + info.gather;
+							}
 						Go.log(str);
 					}
 				}
@@ -537,75 +553,106 @@ public class Process {
 			info.events.push(Info.EventType.fairyAppear);
 			break;
 		case GET_FLOOR_INFO:
+			if (!SellCard.tried && info.cardNum >= info.cardMax){
+				Go.log("现有卡片 " + info.cardNum +"/"+ info.cardMax + " ,开始卖卡或合成");
+				if(SellCard.run()){
+					Go.log("卖卡成功");
+					ReturnMain.run();
+					}
+				else{
+					Go.log("卖卡失败，等待用户");
+					info.events.push(Info.EventType.fairyAppear);
+					break;
+					}
+			}
 			if (GetAreaInfo.run(false)) {
 				FloorInfo floorInfo = null;
 				boolean isClear = false;
 				if (info.floorInfos.size() > 0) {
-					if (Info.runFactor.equals("1")) {
+					if (Info.dayFirst.equals("1") && Info.runFactor.equals("1")
+							|| Info.maptimelimitUp != -1) {
 						for (FloorInfo fInfo : info.floorInfos) {
-							if(Info.maptimelimitUp != -1){
-								if (fInfo.name.contains("奖励")){
+							if (Info.maptimelimitUp != -1) {
+								if (fInfo.name.contains("奖励")) {
 									Go.log("限时秘境完成");
 									floorInfo = fInfo;
 									TimeManager.done = true;
 									break;
-									}
-								if (fInfo.name.contains("限时")){
-									Go.log("优先限时秘境");								
-									Info.hasPrivateFairyStopRun = 0;
-									floorInfo = fInfo;								
-									Info.maptimelimit = true;								
-									TimeManager.found =true;
-									break;
-									}
 								}
-							if (Info.dayFirst.equals("1") && fInfo.id.contains("5000")) {
+								if (fInfo.name.contains("限时")) {
+									Go.log("优先限时秘境");
+									Info.hasPrivateFairyStopRun = 0;
+									floorInfo = fInfo;
+									Info.maptimelimit = true;
+									TimeManager.found = true;
+									break;
+								}
+							}
+							if (Info.dayFirst.equals("1")
+									&& fInfo.id.contains("5000")) {
 								floorInfo = fInfo;
 								break;
 							}
 
 							else {
-								if (!fInfo.race_type.equals("12") ){
+								if (!Process.info.hasPartyFairy
+										&& fInfo.race_type.equals("12")
+										&& Info.canRun == 0) {
 									floorInfo = fInfo;
-									}
-								if (!Process.info.hasPartyFairy && fInfo.race_type.equals("12") && Info.canRun == 0  ){
-									floorInfo = fInfo;
-									}
-								break;
 								}
+								if (!fInfo.race_type.equals("12")
+										&& !fInfo.id.contains("5000")) {
+									floorInfo = fInfo;
+								}
+							}
+							floorInfo = fInfo;
 						}
 						GetFloorInfo.run(floorInfo, false);
 					} else {
-						if (Info.whatMap != 0) {
+						if (Info.whatMap == 0) {
 							GetAreaInfo.run(true);
-							floorInfo = info.floorInfos.get(Info.whatMap - 1);
-							GetFloorInfo.run(floorInfo, true);
+							for (FloorInfo fInfo : info.floorInfos) {
+								if (!Process.info.hasPartyFairy
+										&& fInfo.race_type.equals("12")
+										&& Info.canRun == 0) {
+									floorInfo = fInfo;
+									break;
+								}
+								if (!fInfo.race_type.equals("12")
+										&& !fInfo.id.contains("5000")) {
+									floorInfo = fInfo;
+									break;
+								}
+								floorInfo = fInfo;
+							}
+							GetFloorInfo.run(floorInfo, false);
 						} else {
 							floorInfo = info.floorInfos.get(Info.whatMap);
-							GetFloorInfo.run(floorInfo, false);
+							GetFloorInfo.run(floorInfo, true);
 						}
 					}
 				} else {
 					GetAreaInfo.run(true);
-					if (Info.whatMap != 0) {
-						floorInfo = info.floorInfos.get(Info.whatMap - 1);
+					if (Info.whatMap == 0) {
+						for (FloorInfo fInfo : info.floorInfos) {
+							if (!Process.info.hasPartyFairy
+									&& fInfo.race_type.equals("12")
+									&& Info.canRun == 0) {
+								floorInfo = fInfo;
+								break;
+							}
+							if (!fInfo.race_type.equals("12")
+									&& !fInfo.id.contains("5000")) {
+								floorInfo = fInfo;
+								break;
+							}
+							floorInfo = fInfo;
+						}
 					} else {
 						floorInfo = info.floorInfos.get(Info.whatMap);
 					}
 					GetFloorInfo.run(floorInfo, true);
 					isClear = true;
-				}
-				if (!SellCard.tried && info.cardNum >= info.cardMax){
-					Go.log("现有卡片 " + info.cardNum +"/"+ info.cardMax + " ,开始卖卡或合成");
-					if(SellCard.run()){
-						Go.log("卖卡成功");
-						ReturnMain.run();
-						}
-					else{
-						Go.log("卖卡失败，等待用户");
-						info.events.push(Info.EventType.fairyAppear);
-						break;
-						}
 				}	
 				Go.log("获取地图完毕,探索:" + floorInfo.name);
 				if (!info.floorId.equals("") && info.floorCost != 0) {
@@ -733,6 +780,23 @@ public class Process {
 				Go.log("尝试卖卡");
 				if(SellCard.run()){
 					Go.log("卖卡成功");
+					ReturnMain.run();
+					info.events.push(Info.EventType.fairyAppear);
+					break;
+					}
+				else
+					Go.log("等待用户");
+			}
+			catch (Exception ex){
+				throw ex;
+			}
+			info.events.push(Info.EventType.fairyAppear);
+			break;
+		case ADD_FRIENDS:
+			try {
+				Go.log("获取好友列表");
+				if(AddFriends.run()){
+					Go.log("获取好友");
 					ReturnMain.run();
 					info.events.push(Info.EventType.fairyAppear);
 					break;

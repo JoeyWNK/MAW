@@ -30,6 +30,8 @@ public class Think {
 				return Action.GET_FLOOR_INFO;
 			case SELL_CARD:
 				return Action.SELL_CARD;
+			case ADD_FRIENDS:
+				return Action.ADD_FRIENDS;
 			default:
 			}
 		}
