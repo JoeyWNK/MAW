@@ -1,6 +1,7 @@
 package net;
 
 import info.CardConfigInfo;
+import info.CheckDeck;
 import info.FairyInfo;
 import info.FloorInfo;
 import info.NoNameInfo;
@@ -40,6 +41,8 @@ import action.PvpWithNoName;
 import action.ReturnMain;
 import action.RewardCheck;
 import action.SellCard;
+import autoBattle.AutoBattle;
+import autoBattle.fairyAttackPredict;
 
 @SuppressWarnings("unused")
 public class Process {
@@ -212,6 +215,7 @@ public class Process {
 				System.out.println(ex.toString());
 				info.events.push(Info.EventType.notLoggedIn);
 			}
+			CheckDeck.run();
 			break;
 		case GET_FAIRY_LIST:
 			if (info.nextExp <= 3 * info.apCurrent * 1.2){
@@ -454,49 +458,21 @@ public class Process {
 				Go.log("用户:" + fairyInfo.userName + " 妖精:" + fairyInfo.name
 						+ " 等级:" + fairyInfo.lv + " HP:" + fairyInfo.currentHp
 						+ "/" + fairyInfo.maxHp);
-				int fairyLv = Integer.parseInt(fairyInfo.lv);
-				ChangeCardItems.run(Info.wolf, Info.wolfLr);
-				// 一般来说，名字带"的"的都是觉醒……中文做utf编码处理，防止乱码
-				// 如果是觉醒使用觉醒卡组
 				if (Info.fairyType.contains(fairyInfo.type + "")){
-					if (URLEncoder.encode(fairyInfo.name, "utf-8").contains(
-							"%E7%9A%84")) {
-						for (CardConfigInfo cardConfigInfo : Info.cardConfigInfos) {
-							if (fairyLv >= cardConfigInfo.lvMin
-									&& fairyLv <= cardConfigInfo.lvMax
-									&& info.bcCurrent >= cardConfigInfo.cardCost
-									&& i.doubleValue() >= cardConfigInfo.hp
-									&& cardConfigInfo.wake == 1) {
-								try{
-									ChangeCardItems.run(cardConfigInfo.cardItem,
-										cardConfigInfo.cardLr);
-								}catch(Exception e){
-									if (e.toString().contains("8000") && e.toString().contains("失败")){
-										Info.cardConfigInfos.remove(cardConfigInfo);
-										}
-								}
-								break;
-							}
-						}
-					} else {
-						for (CardConfigInfo cardConfigInfo : Info.cardConfigInfos) {
-							if (fairyLv >= cardConfigInfo.lvMin
-									&& fairyLv <= cardConfigInfo.lvMax
-									&& info.bcCurrent >= cardConfigInfo.cardCost
-									&& i.doubleValue() >= cardConfigInfo.hp
-									&& cardConfigInfo.wake == 0) {
-								try{
-									ChangeCardItems.run(cardConfigInfo.cardItem,
-										cardConfigInfo.cardLr);
-								}catch(Exception e){
-									if (e.toString().contains("8000") && e.toString().contains("失败")){
-										Info.cardConfigInfos.remove(cardConfigInfo);
-										}
-								}
-								break;
-							}
-						}
-					}
+					int fairyLv = Integer.parseInt(fairyInfo.lv);
+					int fairyatk = fairyAttackPredict.Predict(fairyInfo);
+					int type = 0;
+					if (URLEncoder.encode(fairyInfo.name, "utf-8").contains("%E7%9A%84"))
+						type = 1;
+					String Deck = AutoBattle.GetWinDeck(fairyLv, fairyInfo.maxHp, fairyInfo.currentHp, fairyatk, info.bcCurrent, info.ex_gauge);
+					if (Deck.equals("null"))
+						Deck = AutoBattle.GetCollectionDeck(fairyLv, type, fairyInfo.maxHp, fairyInfo.currentHp, fairyatk, info.bcCurrent, 10, info.ex_gauge);
+					if (Deck.equals("null"))
+						ChangeCardItems.run(Info.wolf, Info.wolfLr);
+					else
+						ChangeCardItems.run(Deck, Deck.substring(0,Deck.indexOf(",") - 1));
+				} else {
+					ChangeCardItems.run(Info.wolf, Info.wolfLr);
 				}
 				if (FairyBattle.run(fairyInfo)) {
 					if (info.isLvUp) {

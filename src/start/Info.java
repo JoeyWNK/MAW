@@ -74,6 +74,7 @@ public class Info {
 	public int friendMax = 0;
 	public int invitations = 0; //好友邀请数
 	public int rewards = 0;
+	public int ex_gauge = 0;//咖喱棒（误）
 	
 	// floor info
 	public String floorId = "";
@@ -155,7 +156,8 @@ public class Info {
 	public List<UserCardsInfo> userCardsInfos;
 	public int cardMax;
 	public int fairyRewardCount;
-	public int cardNum;	
+	public int cardNum;
+		
 	
 	
 	

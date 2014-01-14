@@ -54,7 +54,6 @@ public class GetBattleResult {
 		} else {
 			Process.info.isLvUp = false;
 		}
-
 		if(Process.info.battleResult.contains("win")){
 			Process.info.cardNum = ((NodeList)xpath.evaluate("//owner_card_list/user_card", doc, XPathConstants.NODESET)).getLength();
 			CreateXML.UserInfo = doc;

@@ -91,7 +91,7 @@ public class RewardCheck {
 					){
 					try {
 						ArrayList<NameValuePair> al = new ArrayList<NameValuePair>();
-						al.add(new BasicNameValuePair("notice_id", id+";"));
+						al.add(new BasicNameValuePair("notice_id", id));
 						result = Process.connect.connectToServer(URL_GET_REWARD,al );
 						Go.log("领取 " + content);
 					} catch (Exception ex) {

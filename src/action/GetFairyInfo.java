@@ -14,7 +14,7 @@ public class GetFairyInfo {
 
 	// 获取妖精列表
 	private static final String URL_FAIRY_INFO = Info.LoginServer
-			+ "/connect/app/exploration/fairy_floor?cyt=1";
+			+ "/connect/app/exploration/fairyhistory?cyt=1";
 
 	// 返回结果
 	private static byte[] result;

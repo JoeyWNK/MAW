@@ -37,6 +37,10 @@ public class GetUserInfo  {
 				"//your_data/free_ap_bc_point", doc));
 		Process.info.friendpoint = Integer.parseInt(xpath.evaluate(
 				"//your_data/friendship_point", doc));
+		if ((boolean)xpath.evaluate("//your_data/ex_gauge", doc, XPathConstants.BOOLEAN))
+			Process.info.ex_gauge = Integer.parseInt(xpath.evaluate(
+					"//your_data/ex_gauge", doc));
+		
 		if (getId) {
 			
 			Process.info.userId = xpath.evaluate(
