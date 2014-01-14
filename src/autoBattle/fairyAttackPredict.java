@@ -13,9 +13,7 @@ public class fairyAttackPredict {
 	 */
 	public static ArrayList<radio> Record = new ArrayList<>();
 	
-	public static ArrayList<String> Recorded = new ArrayList<>();
-	
-	public static int Predict(FairyInfo fairy) throws UnsupportedEncodingException {
+	public static int Predict(FairyInfo fairy) {
 		int atk = 0;
 		int lv = Integer.parseInt(fairy.lv);
 		int hpMax = fairy.maxHp;
@@ -24,19 +22,22 @@ public class fairyAttackPredict {
 			if(Record.get(i).FairyName.equals(fairy.name))
 				pos.add(i);
 		if (pos.isEmpty()){
-			if (URLEncoder.encode(fairy.name, "utf-8").contains("%E7%9A%84")){
-				if ( (hpMax - 965000) / lv > 39000)
-					atk = 18116 + lv * 625;
-				else
-					atk = 10303 + lv * 355;
-			} else {
-				if( (hpMax - 15000) / lv > 8000){
+			try {
+				if (URLEncoder.encode(fairy.name, "utf-8").contains("%E7%9A%84")){
 					if ( (hpMax - 965000) / lv > 39000)
 						atk = 18116 + lv * 625;
 					else
-						atk = 1987 + lv * 199;
-				} else 
-					atk = 1260 + lv * 126;
+						atk = 10303 + lv * 355;
+				} else {
+					if( (hpMax - 15000) / lv > 8000){
+						if ( (hpMax - 965000) / lv > 39000)
+							atk = 18116 + lv * 625;
+						else
+							atk = 1987 + lv * 199;
+					} else 
+						atk = 1260 + lv * 126;
+				}
+			} catch (UnsupportedEncodingException e) {
 			}
 		} else if(pos.size() == 1){
 			double rate = Record.get(pos.get(0)).atk / Record.get(pos.get(0)).lv;
@@ -59,7 +60,7 @@ public class fairyAttackPredict {
 				Record.get(pos.get(0)).base = base;
 				atk = (int) (Record.get(pos.get(0)).rate * lv + Record.get(pos.get(0)).base);
 			}
-		}		
+		}
 		return atk;
 	}
 
@@ -85,7 +86,7 @@ public class fairyAttackPredict {
 
 }
 class radio{
-	String FairyName = "";
+	String FairyName = " ";
 	
 	int lv = 0;
 	

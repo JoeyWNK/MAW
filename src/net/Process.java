@@ -200,6 +200,7 @@ public class Process {
 					if (info.gather != 0)
 						str = str + " 收集品:" + info.gather;
 					Go.log(str);
+					AutoBattle.Init(info.country_id);
 //					if(loop == 0)
 //					RewardCheck.run();
 					if (!SellCard.tried && info.cardNum >= info.cardMax){
@@ -458,15 +459,15 @@ public class Process {
 				Go.log("用户:" + fairyInfo.userName + " 妖精:" + fairyInfo.name
 						+ " 等级:" + fairyInfo.lv + " HP:" + fairyInfo.currentHp
 						+ "/" + fairyInfo.maxHp);
-				if (Info.fairyType.contains(fairyInfo.type + "")){
+				if (Info.fairyType.contains(fairyInfo.type + "")){					
 					int fairyLv = Integer.parseInt(fairyInfo.lv);
-					int fairyatk = fairyAttackPredict.Predict(fairyInfo);
+					int fairyatk = (int) (fairyAttackPredict.Predict(fairyInfo) / 1.3);
 					int type = 0;
 					if (URLEncoder.encode(fairyInfo.name, "utf-8").contains("%E7%9A%84"))
-						type = 1;
+						type = 1;					
 					String Deck = AutoBattle.GetWinDeck(fairyLv, fairyInfo.maxHp, fairyInfo.currentHp, fairyatk, info.bcCurrent, info.ex_gauge);
 					if (Deck.equals("null"))
-						Deck = AutoBattle.GetCollectionDeck(fairyLv, type, fairyInfo.maxHp, fairyInfo.currentHp, fairyatk, info.bcCurrent, 10, info.ex_gauge);
+						Deck = AutoBattle.GetCollectionDeck(fairyLv, type, fairyInfo.maxHp, fairyInfo.currentHp, fairyatk, info.bcCurrent, 6, info.ex_gauge);
 					if (Deck.equals("null"))
 						ChangeCardItems.run(Info.wolf, Info.wolfLr);
 					else
@@ -479,7 +480,8 @@ public class Process {
 						String str = ("战斗结果:" + info.battleResult
 								+ " 金币:" + info.gold + " AP:"
 								+ info.apCurrent + "/" + info.apMax + " BC:"
-								+ info.bcCurrent + "/" + info.bcMax);
+								+ info.bcCurrent + "/" + info.bcMax 
+								+ " EX:" + info.ex_gauge);
 						if (info.gather != 0 || info.GuildGather != 0){
 							if(fairyInfo.race_type.equals("12"))
 								str = str + " 公会收集品:" + info.GuildGather;
@@ -496,7 +498,8 @@ public class Process {
 						String str = ("战斗结果:" + info.battleResult + " 经验:"
 								+ info.exp + "/" + info.nextExp + " 金币:" + info.gold + " AP:"
 								+ info.apCurrent + "/" + info.apMax + " BC:"
-								+ info.bcCurrent + "/" + info.bcMax);
+								+ info.bcCurrent + "/" + info.bcMax
+								+ " EX:" + info.ex_gauge);
 						if (info.gather != 0 || info.GuildGather != 0){
 							if(fairyInfo.race_type.equals("12"))
 								str = str + " 公会收集品:" + info.GuildGather;
@@ -708,7 +711,7 @@ public class Process {
 								info.events.push(Info.EventType.fairyAppear);
 								break;
 							}
-							if (info.apCurrent > Info.stopRunWhenApLess) {
+							if (info.apCurrent < Info.stopRunWhenApLess) {
 								Go.log("AP低于设定值，停止跑图");
 								info.events.push(Info.EventType.fairyAppear);
 								break;

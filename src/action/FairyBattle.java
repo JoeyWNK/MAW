@@ -51,11 +51,18 @@ public class FairyBattle {
 		}
 	}
 
-	private static void record(FairyInfo fairyInfo, Document doc) throws XPathExpressionException {
+	private static void record(FairyInfo fairyInfo, Document doc) {
 		XPathFactory factory = XPathFactory.newInstance();
 		XPath xpath = factory.newXPath();
-		int atk = Integer.parseInt(xpath.evaluate(String.format("/response/body/battle_vs_info/player[serial_id=%s]/user_card/power",fairyInfo.name), doc));
-		fairyAttackPredict.Record(fairyInfo,atk);
+		int atk;
+		try {
+			atk = Integer.parseInt(xpath.evaluate("/response/body/battle_vs_info/player/user_card[serial_id=1]/power", doc));
+			fairyAttackPredict.Record(fairyInfo,atk);
+		} catch (NumberFormatException e) {
+		} catch (XPathExpressionException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	private static boolean parse(FairyInfo fairyInfo, Document doc) throws Exception {

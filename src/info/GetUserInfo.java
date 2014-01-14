@@ -53,6 +53,8 @@ public class GetUserInfo  {
 					"//your_data/friends_invitations", doc));
 			Process.info.rewards = Integer.parseInt(xpath.evaluate(
 					"/response/body/mainmenu/rewards", doc));
+			Process.info.country_id = Integer.parseInt(xpath.evaluate(
+					"//your_data/country_id", doc));
 			System.out.print("获取物品列表");
 			if ((boolean)xpath.evaluate("count(//your_data/itemlist[item_id=1])>0", doc, XPathConstants.BOOLEAN)) {
 				Process.info.fullAp = Integer.parseInt(xpath.evaluate("//your_data/itemlist[item_id=1]/num", doc));
