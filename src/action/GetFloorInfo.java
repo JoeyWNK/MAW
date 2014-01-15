@@ -22,6 +22,7 @@ public class GetFloorInfo {
 
 	public static boolean run(FloorInfo floorInfo, boolean isClear)
 			throws Exception {
+		Info.errorPos = "GetFloorInfo";
 		Document doc;
 		ArrayList<NameValuePair> al = new ArrayList<NameValuePair>();
 		al.add(new BasicNameValuePair("area_id", floorInfo.id));

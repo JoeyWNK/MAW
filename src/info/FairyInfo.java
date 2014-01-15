@@ -15,17 +15,14 @@ public class FairyInfo {
 	public int currentHp = 0;
 
 	public int maxHp = 0;
-	
+
 	public int LimitTime = 0;
 
 	public String race_type = "";
-	
-	public int type = 0;
+
+	public int type = 1;
 	/**
-	 * 1 = 普妖
-	 * 2 = 普妖觉醒
-	 * 3 = 公会妖
-	 * 4 = 公会妖觉醒
+	 * 1 = 普妖 2 = 普妖觉醒 3 = 公会妖 4 = 公会妖觉醒
 	 */
 
 }

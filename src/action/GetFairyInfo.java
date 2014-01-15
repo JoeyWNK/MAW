@@ -20,6 +20,7 @@ public class GetFairyInfo {
 	private static byte[] result;
 
 	public static boolean run(FairyInfo fairyInfo) throws Exception {
+		Info.errorPos = "GetFairyInfo";
 		Document doc;
 		ArrayList<NameValuePair> al = new ArrayList<NameValuePair>();
 		al.add(new BasicNameValuePair("check", "1"));
@@ -45,7 +46,7 @@ public class GetFairyInfo {
 	}
 
 	private static boolean parse(Document doc) throws Exception {
-		
+
 		return true;
 	}
 

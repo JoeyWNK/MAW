@@ -26,6 +26,9 @@ public class GetFairyList {
 	private static byte[] result;
 
 	public static boolean run() throws Exception {
+		Info.errorPos = "GetFairyList";
+		Process.info.canBattleFairyInfos = new ArrayList<FairyInfo>();
+		Process.info.events.push(Info.EventType.fairyAppear);
 		Document doc;
 		ArrayList<NameValuePair> al = new ArrayList<NameValuePair>();
 		try {
@@ -92,27 +95,29 @@ public class GetFairyList {
 									fairyInfo.lv = f1.getFirstChild()
 											.getNodeValue();
 								} else if (f1.getNodeName().equals("race_type")) {
-									fairyInfo.race_type = f1.getFirstChild().getNodeValue();
-				                }
+									fairyInfo.race_type = f1.getFirstChild()
+											.getNodeValue();
+								}
 								f1 = f1.getNextSibling();
 							} while (f1 != null);
 						}
 						f = f.getNextSibling();
 					} while (f != null);
-					if (fairyInfo.race_type.equals("12")){
-						if (URLEncoder.encode(fairyInfo.name, "utf-8").contains(
-								"%E7%9A%84")){
+					if (fairyInfo.race_type.equals("12")) {
+						if (URLEncoder.encode(fairyInfo.name, "utf-8")
+								.contains("%E7%9A%84")) {
 							fairyInfo.type = 4;
 						} else {
 							fairyInfo.type = 3;
-							}
-					}else if (URLEncoder.encode(fairyInfo.name, "utf-8").contains(
-							"%E7%9A%84")){
-						fairyInfo.type = 2;
-					}else {
-						fairyInfo.type = 1;
 						}
-					if (fairyInfo.userId.equals(Process.info.userId) && !fairyInfo.race_type.equals("12")) {
+					} else if (URLEncoder.encode(fairyInfo.name, "utf-8")
+							.contains("%E7%9A%84")) {
+						fairyInfo.type = 2;
+					} else {
+						fairyInfo.type = 1;
+					}
+					if (fairyInfo.userId.equals(Process.info.userId)
+							&& !fairyInfo.race_type.equals("12")) {
 						run++;
 						if (Info.isBattlePrivateFariy.equals("1")) {
 							fairyInfos.add(fairyInfo);
@@ -137,8 +142,9 @@ public class GetFairyList {
 				}
 			}
 			Process.info.fairyInfos = fairyInfos;
-			
-			Process.info.fairyRewardCount = Integer.parseInt(xpath.evaluate("//fairy_select/remaining_rewards", doc));
+
+			Process.info.fairyRewardCount = Integer.parseInt(xpath.evaluate(
+					"//fairy_select/remaining_rewards", doc));
 		} catch (Exception ex) {
 			throw ex;
 		}

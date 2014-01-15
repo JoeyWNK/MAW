@@ -14,7 +14,7 @@ import start.Info;
 public class ExceptionCatch {
 
 	public static boolean catchException(Document doc) throws Exception {
-
+		Info.errorPos = "catchException";
 		XPathFactory factory = XPathFactory.newInstance();
 		XPath xpath = factory.newXPath();
 		try {
@@ -27,22 +27,23 @@ public class ExceptionCatch {
 					Info.timepoverty = 5;
 					throw new Exception(errorCode + "："
 							+ errorMessage.replace("\n", "，"));
-				}else if (errorCode.equals("8000")) {
-					if (errorMessage.replace("\n", "，").contains("成功")){
+				} else if (errorCode.equals("8000")) {
+					if (errorMessage.replace("\n", "，").contains("成功")) {
 						Go.log("成功领取\n");
 						return false;
-						}
-					if (errorMessage.replace("\n", "，").contains("卡片")){
+					}
+					if (errorMessage.replace("\n", "，").contains("卡片")) {
 						throw new Exception(errorCode + "："
 								+ errorMessage.replace("\n", "，"));
-						}
-					if (errorMessage.replace("\n", "，").contains("失败")){
+					}
+					if (errorMessage.replace("\n", "，").contains("失败")) {
 						throw new Exception(errorCode + "："
 								+ errorMessage.replace("\n", "，"));
-						}
-				}else if (errorCode.equals("1010") || errorMessage.replace("\n", "，").contains("消灭")) {
+					}
+				} else if (errorCode.equals("1010")
+						|| errorMessage.replace("\n", "，").contains("消灭")) {
 					if (Info.timepoverty > 1)
-					Info.timepoverty = Info.timepoverty / 2 ;
+						Info.timepoverty = Info.timepoverty / 2;
 					throw new Exception(errorCode + "："
 							+ errorMessage.replace("\n", "，"));
 				} else if (errorCode.equals("1030")
@@ -57,7 +58,7 @@ public class ExceptionCatch {
 					throw new Exception(errorCode + "："
 							+ errorMessage.replace("\n", "，"));
 				} else if (errorCode.equals("1020")
-						|| errorMessage.replace("\n", "，").contains("维护")){
+						|| errorMessage.replace("\n", "，").contains("维护")) {
 					Go.log("等待官网更新");
 					Thread.sleep(1000 * (long) (10 * 60 + Math.random() * 20));
 					throw new Exception(errorCode + "："
@@ -67,7 +68,7 @@ public class ExceptionCatch {
 						+ errorMessage.replace("\n", "，"));
 				return true;
 			}
-			if (errorMessage.contains("卡")){
+			if (errorMessage.contains("卡")) {
 				net.Process.info.events.push(Info.EventType.cardFull);
 				return true;
 			}

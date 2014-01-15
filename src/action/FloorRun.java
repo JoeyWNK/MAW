@@ -24,6 +24,7 @@ public class FloorRun {
 	private static byte[] result;
 
 	public static boolean run(FloorInfo floorInfo) throws Exception {
+		Info.errorPos = "FloorRun";
 		Document doc;
 		ArrayList<NameValuePair> al = new ArrayList<NameValuePair>();
 		al.add(new BasicNameValuePair("area_id", floorInfo.id));
@@ -56,7 +57,7 @@ public class FloorRun {
 
 			GetUserInfo.getUserInfo(doc, false);
 			FloorRunInfo.floorRunInfo(doc);
-			
+
 		} catch (Exception ex) {
 			throw ex;
 		}

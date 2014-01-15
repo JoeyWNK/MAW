@@ -17,13 +17,14 @@ import start.Info;
 
 public class CreateXML {
 	public static Document UserInfo;
+
 	public static void createXML(Document doc, String xmlName) {
 		StringWriter strWtr = new StringWriter();
 		StreamResult strResult = new StreamResult(strWtr);
 		TransformerFactory tfac = TransformerFactory.newInstance();
-		
-		if (Info.devMode || xmlName.contains("user")){
-			if (xmlName.contains("user")){
+
+		if (Info.devMode || xmlName.contains("user")) {
+			if (xmlName.contains("user")) {
 				UserInfo = doc;
 			}
 			try {
@@ -32,8 +33,8 @@ public class CreateXML {
 				t.setOutputProperty(OutputKeys.INDENT, "yes");
 				t.setOutputProperty(OutputKeys.METHOD, "xml"); // xml, html,
 				// text
-				t.setOutputProperty("{http://xml.apache.org/xslt}indent-amount",
-						"4");
+				t.setOutputProperty(
+						"{http://xml.apache.org/xslt}indent-amount", "4");
 				t.transform(new DOMSource(doc.getDocumentElement()), strResult);
 			} catch (Exception e) {
 				System.err.println("XML.toString(Document): " + e);

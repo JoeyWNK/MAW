@@ -12,6 +12,6 @@ public class UserInfo {
 	public String last_login = "";
 
 	public int friendsNum = 0;
-	
+
 	public int friendsMax = 0;
 }

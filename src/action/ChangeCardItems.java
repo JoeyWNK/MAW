@@ -18,6 +18,7 @@ public class ChangeCardItems {
 	private static byte[] result;
 
 	public static boolean run(String card, String lr) throws Exception {
+		Info.errorPos = "ChangeCardItems.run";
 		Document doc;
 		ArrayList<NameValuePair> al = new ArrayList<NameValuePair>();
 		al.add(new BasicNameValuePair("deck_id", "1"));
@@ -42,6 +43,7 @@ public class ChangeCardItems {
 	}
 
 	private static boolean parse(Document doc) throws Exception {
+		Info.errorPos = "ChangeCardItems.parse";
 		try {
 
 			if (ExceptionCatch.catchException(doc)) {

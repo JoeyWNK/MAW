@@ -17,10 +17,11 @@ public class PVPRedirect {
 	private static byte[] result;
 
 	public static boolean run() throws Exception {
+		Info.errorPos = "PVPRedirect";
 		Document doc;
 		ArrayList<NameValuePair> al = new ArrayList<NameValuePair>();
-		al.add(new BasicNameValuePair("event_id","48"));
-		al.add(new BasicNameValuePair("move","1"));
+		al.add(new BasicNameValuePair("event_id", "48"));
+		al.add(new BasicNameValuePair("move", "1"));
 		try {
 			result = Process.connect.connectToServer(URL_GET_REDIRECT, al);
 		} catch (Exception ex) {

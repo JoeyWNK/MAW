@@ -11,8 +11,8 @@ public class UserCardsInfo {
 	public int hp = 0;
 
 	public int atk = 0;
-	
+
 	public boolean holography = false;
-	//闪卡？
+	// 闪卡？
 	public int sale_price = 0;
 }

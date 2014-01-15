@@ -2,6 +2,7 @@ package action;
 
 import info.CreateXML;
 import info.FairyInfo;
+import info.GetBattleDetail;
 import info.GetBattleResult;
 import info.GetUserInfo;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class FairyBattle {
 	private static byte[] result;
 
 	public static boolean run(FairyInfo fairyInfo) throws Exception {
+		Info.errorPos = "FairyBattle";
 		Document doc;
 		ArrayList<NameValuePair> al = new ArrayList<NameValuePair>();
 		al.add(new BasicNameValuePair("race_type", fairyInfo.race_type));
@@ -45,7 +47,7 @@ public class FairyBattle {
 			throw ex;
 		}
 		try {
-			return parse(fairyInfo,doc);
+			return parse(fairyInfo, doc);
 		} catch (Exception ex) {
 			throw ex;
 		}
@@ -56,16 +58,22 @@ public class FairyBattle {
 		XPath xpath = factory.newXPath();
 		int atk;
 		try {
-			atk = Integer.parseInt(xpath.evaluate("/response/body/battle_vs_info/player/user_card[serial_id=1]/power", doc));
-			fairyAttackPredict.Record(fairyInfo,atk);
+			atk = Integer
+					.parseInt(xpath
+							.evaluate(
+									"/response/body/battle_vs_info/player/user_card[serial_id=1]/power",
+									doc));
+			fairyAttackPredict.Record(fairyInfo, atk);
 		} catch (NumberFormatException e) {
+			e.printStackTrace();
 		} catch (XPathExpressionException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
-	private static boolean parse(FairyInfo fairyInfo, Document doc) throws Exception {
+	private static boolean parse(FairyInfo fairyInfo, Document doc)
+			throws Exception {
 		try {
 
 			if (ExceptionCatch.catchException(doc)) {
@@ -74,9 +82,14 @@ public class FairyBattle {
 			CreateXML.createXML(doc, "FairyBattleInfo");
 			GetBattleResult.getBattleResult(doc);
 			GetUserInfo.getUserInfo(doc, false);
-			record(fairyInfo,doc);
+			record(fairyInfo, doc);
 		} catch (Exception ex) {
 			throw ex;
+		}
+		try {
+			GetBattleDetail.run(doc);
+		} catch (Exception e) {
+			System.out.println("战斗分析失败" + e);
 		}
 		return true;
 	}

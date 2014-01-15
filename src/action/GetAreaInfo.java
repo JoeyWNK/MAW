@@ -28,6 +28,7 @@ public class GetAreaInfo {
 	private static byte[] result;
 
 	public static boolean run(boolean isClear) throws Exception {
+		Info.errorPos = "GetAreaInfo";
 		Document doc;
 		ArrayList<NameValuePair> al = new ArrayList<NameValuePair>();
 		try {
@@ -86,16 +87,17 @@ public class GetAreaInfo {
 						}
 						f = f.getNextSibling();
 					} while (f != null);
-					if (Info.fix.equals("1") && floorInfo.race_type.equals("12")){
+					if (Info.fix.equals("1")
+							&& floorInfo.race_type.equals("12")) {
 						continue;
-					}
-					else if (Info.fix.equals("2") && floorInfo.race_type.equals("2")){
-						if(Process.info.hasPartyFairy){
+					} else if (Info.fix.equals("2")
+							&& floorInfo.race_type.equals("2")) {
+						if (Process.info.hasPartyFairy) {
 							Info.canRun = 0;
 							Go.log("有公会妖!");
 						}
 						continue;
-					}						
+					}
 					if (Info.whatMap != 0) {
 						if (floorInfo.area_type.equals(Info.runFactor)) {
 							floorInfos.add(floorInfo);

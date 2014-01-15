@@ -17,6 +17,7 @@ public class ReturnMain {
 	private static byte[] result;
 
 	public static boolean run() throws Exception {
+		Info.errorPos = "ReturnMain";
 		Document doc;
 		ArrayList<NameValuePair> al = new ArrayList<NameValuePair>();
 		try {
@@ -24,6 +25,7 @@ public class ReturnMain {
 		} catch (Exception ex) {
 			throw ex;
 		}
+		Info.errorPos += 1;
 		try {
 			doc = Process.ParseXMLBytes(result);
 
@@ -31,6 +33,7 @@ public class ReturnMain {
 			throw ex;
 		}
 		try {
+			Info.errorPos += 2;
 			return parse(doc);
 		} catch (Exception ex) {
 			throw ex;
@@ -43,9 +46,9 @@ public class ReturnMain {
 			if (ExceptionCatch.catchException(doc)) {
 				return false;
 			}
-
+			Info.errorPos += 21;
 			GetUserInfo.getUserInfo(doc, false);
-
+			Info.errorPos += 22;
 		} catch (Exception ex) {
 			throw ex;
 		}

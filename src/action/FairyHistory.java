@@ -23,6 +23,7 @@ public class FairyHistory {
 	private static byte[] result;
 
 	public static boolean run(FairyInfo fairyInfo) throws Exception {
+		Info.errorPos = "FairyHistory";
 		Document doc;
 		ArrayList<NameValuePair> al = new ArrayList<NameValuePair>();
 		al.add(new BasicNameValuePair("race_type", fairyInfo.race_type));
@@ -33,12 +34,15 @@ public class FairyHistory {
 		} catch (Exception ex) {
 			throw ex;
 		}
+		Info.errorPos += 1;
 		try {
 			doc = Process.ParseXMLBytes(result);
+			Info.errorPos += 21;
 			CreateXML.createXML(doc, "FairyHistoryInfo");
 		} catch (Exception ex) {
-			throw ex;
+			return run(fairyInfo);
 		}
+		Info.errorPos += 2;
 		try {
 			return parse(doc, fairyInfo);
 		} catch (Exception ex) {
@@ -55,50 +59,34 @@ public class FairyHistory {
 			if (ExceptionCatch.catchException(doc)) {
 				return false;
 			}
-			
 			int attack_times = 0;
+			Info.errorPos += 11;
 			NodeList list = (NodeList) xpath.evaluate(
 					"//fairy_history/fairy/attacker_history/attacker[user_id="
 							+ Process.info.userId + "]", doc,
 					XPathConstants.NODESET);
-			if(list.getLength() > 0){
-				attack_times = Integer.parseInt(xpath.evaluate("//fairy_history/fairy/attacker_history/attacker[user_id="
-						+ Process.info.userId + "]/attack_times", doc));
+			if (list.getLength() > 0) {
+				attack_times = Integer.parseInt(xpath.evaluate(
+						"//fairy_history/fairy/attacker_history/attacker[user_id="
+								+ Process.info.userId + "]/attack_times", doc));
 			}
-			if (    Info.fairyType.contains(fairyInfo.type + "") 
-					&&( !(list.getLength() > 0) /** 未攻击 **/
-							|| (Process.info.bcCurrent 
-									>= Process.info.bcMax - 10)/** BC过多 **/
-							|| (Integer.parseInt(xpath.evaluate(
-									"//fairy_history/fairy/time_limit", doc)) <= 600 
-								&& Process.info.bcCurrent >= 60 &&  (attack_times < 3 && fairyInfo.type % 2 == 1)/** 将加入判断程序 **/
-								)/** 时间过短 **/
-							|| (Process.info.nextExp 
-									<= Process.info.bcCurrent * 1.2 / 2)/** 快要升级**/
-						)
-						&& (Integer.parseInt(xpath.evaluate(
-								"//fairy_history/fairy/hp", doc)) > 0)
-						&& (Integer.parseInt(xpath.evaluate(
-								"//fairy_history/fairy/time_limit", doc)) > 0
-						)
-					||	(xpath.evaluate("//fairy_history/fairy/discoverer_id", doc).trim().equals(Process.info.userId)
-						&& !(list.getLength() > 0)/**己妖放出**/
-						)
-					
-				) 
-			{
-			fairyInfo.currentHp = Integer.parseInt(xpath.evaluate(
-					"//fairy_history/fairy/hp", doc));
-			fairyInfo.maxHp = Integer.parseInt(xpath.evaluate(
-					"//fairy_history/fairy/hp_max", doc));
 			fairyInfo.LimitTime = Integer.parseInt(xpath.evaluate(
 					"//fairy_history/fairy/time_limit", doc));
-			Process.info.canBattleFairyInfos.add(fairyInfo);	
-			} else return false;
-
+			Info.errorPos += 12;
+			if (list.getLength()==0 || (fairyInfo.LimitTime <600 && attack_times < 4) || (Process.info.bcCurrent > Process.info.bcMax - 10)) {
+				fairyInfo.currentHp = Integer.parseInt(xpath.evaluate(
+						"//fairy_history/fairy/hp", doc));
+				fairyInfo.maxHp = Integer.parseInt(xpath.evaluate(
+						"//fairy_history/fairy/hp_max", doc));
+				fairyInfo.LimitTime = Integer.parseInt(xpath.evaluate(
+						"//fairy_history/fairy/time_limit", doc));
+				Process.info.canBattleFairyInfos.add(fairyInfo);
+			} else
+				return false;
 		} catch (Exception ex) {
 			throw ex;
 		}
+		Info.errorPos += 13;
 		return true;
 	}
 }

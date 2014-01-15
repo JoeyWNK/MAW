@@ -22,6 +22,7 @@ public class BattleAreaBoss {
 	private static byte[] result;
 
 	public static boolean run(FloorInfo floorInfo) throws Exception {
+		Info.errorPos = "BattleAreaBoss.run";
 		Document doc;
 		ArrayList<NameValuePair> al = new ArrayList<NameValuePair>();
 		al.add(new BasicNameValuePair("area_id", floorInfo.id));
@@ -45,6 +46,7 @@ public class BattleAreaBoss {
 	}
 
 	private static boolean parse(Document doc) throws Exception {
+		Info.errorPos = "BattleAreaBoss.parse";
 		try {
 
 			if (ExceptionCatch.catchException(doc)) {

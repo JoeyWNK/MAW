@@ -27,35 +27,40 @@ public class AddFriends {
 			+ "/connect/app/menu/friend_notice?cyt=1";
 	private static final String URL_ADD_FRIEND = Info.LoginServer
 			+ "/connect/app/friend/approve_friend?cyt=1";
-	
-	public static boolean run() throws Exception {
-			Document doc;
-			byte[] result;
-			Go.log("现有好友邀请:" + Process.info.invitations + ",查看列表");
-			ArrayList<NameValuePair> al = new ArrayList<NameValuePair>();
-			al.add(new BasicNameValuePair("move","1"));
-			try {
-				result = Process.connect.connectToServer(URL_FRIEND_NOTICE, al);
-				doc = Process.ParseXMLBytes(result);
 
-				if (ExceptionCatch.catchException(doc)) {
-					return false;
-				}
-				CreateXML.createXML(doc, "FriendNotice");
-				prase(doc);
-			} catch (Exception ex) {
-				throw ex;
-			}				
-			try {
-			}catch (Exception ex){
-				throw ex;
-			}
+	public static boolean run() throws Exception {
+		Info.errorPos = "AddFriends.run";
+		if (!Info.addFriend) {
+			Process.info.invitations = 0;
 			return true;
-			
-		
+		}
+		Document doc;
+		byte[] result;
+		Go.log("现有好友邀请:" + Process.info.invitations + ",查看列表");
+		ArrayList<NameValuePair> al = new ArrayList<NameValuePair>();
+		al.add(new BasicNameValuePair("move", "1"));
+		try {
+			result = Process.connect.connectToServer(URL_FRIEND_NOTICE, al);
+			doc = Process.ParseXMLBytes(result);
+
+			if (ExceptionCatch.catchException(doc)) {
+				return false;
+			}
+			CreateXML.createXML(doc, "FriendNotice");
+			prase(doc);
+		} catch (Exception ex) {
+			throw ex;
+		}
+		try {
+		} catch (Exception ex) {
+			throw ex;
+		}
+		return true;
+
 	}
 
 	private static void prase(Document doc) {
+		Info.errorPos = "AddFriends.prase";
 		XPathFactory factory = XPathFactory.newInstance();
 		XPath xpath = factory.newXPath();
 		try {
@@ -81,28 +86,28 @@ public class AddFriends {
 						else if (f.getNodeName().equals("town_level")) {
 							user.level = Integer.parseInt(f.getFirstChild()
 									.getNodeValue());
-						} else if (f.getNodeName().equals("friends")){
-							user.friendsNum = Integer.parseInt(f.getFirstChild()
-									.getNodeValue());
-						}else if (f.getNodeName().equals("friend_max")){
-							user.friendsMax = Integer.parseInt(f.getFirstChild()
-									.getNodeValue());
-							}
+						} else if (f.getNodeName().equals("friends")) {
+							user.friendsNum = Integer.parseInt(f
+									.getFirstChild().getNodeValue());
+						} else if (f.getNodeName().equals("friend_max")) {
+							user.friendsMax = Integer.parseInt(f
+									.getFirstChild().getNodeValue());
+						}
 						f = f.getNextSibling();
 					} while (f != null);
 					userlists.add(user);
 				}
 				for (int i = 0; i < userlists.size(); ++i) {
-					if(userlists.get(i).last_login.equals("今天") && userlists.get(i).friendsNum < userlists.get(i).friendsMax){
+					if (userlists.get(i).last_login.equals("今天")
+							&& userlists.get(i).friendsNum < userlists.get(i).friendsMax) {
 						ArrayList<NameValuePair> al = new ArrayList<>();
 						al.add(new BasicNameValuePair("dialog", "1"));
-						al.add(new BasicNameValuePair("user_id",
-								userlists.get(i).id));
-						Go.log("添加好友:" +  userlists.get(i).name
-								+ " Lv." + userlists.get(i).level
-								+ " MaxBC:" + userlists.get(i).cost
-								+ " 最后一次登录:" + userlists.get(i).last_login
-								);
+						al.add(new BasicNameValuePair("user_id", userlists
+								.get(i).id));
+						Go.log("添加好友:" + userlists.get(i).name + " Lv."
+								+ userlists.get(i).level + " MaxBC:"
+								+ userlists.get(i).cost + " 最后一次登录:"
+								+ userlists.get(i).last_login);
 						try {
 							byte[] result = Process.connect.connectToServer(
 									URL_ADD_FRIEND, al);
@@ -114,7 +119,7 @@ public class AddFriends {
 						}
 					}
 				}
-				
+
 				Process.info.invitations = 0;
 			}
 		} catch (XPathExpressionException e) {
